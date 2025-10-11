@@ -1,8 +1,10 @@
 import figlet from "figlet";
 
-// Box drawing characters for styling
-const topBorder = "╔═══════════════════════════════════════════════════════════════════════════════════════════════╗";
-const bottomBorder = "╚═══════════════════════════════════════════════════════════════════════════════════════════════╝";
+// Box drawing characters for styling - optimized for ASCII art width
+// ASCII art is 76 chars wide, so border is 76 + 8 (4 chars padding each side) + 4 (border chars) = 88
+const borderWidth = 88;
+const topBorder = "╔" + "═".repeat(borderWidth - 2) + "╗";
+const bottomBorder = "╚" + "═".repeat(borderWidth - 2) + "╝";
 const sideBorder = "║";
 
 export const app = {
@@ -17,25 +19,31 @@ export const app = {
       verticalLayout: "default",
     });
 
-    // Center the ASCII art
-    const lines = asciiArt.split("\n");
-    const maxWidth = topBorder.length - 4; // Account for side borders and padding
+    // Center the ASCII art perfectly
+    const lines = asciiArt.split("\n").filter(line => line.trim().length > 0);
+    const innerWidth = borderWidth - 4; // Account for side borders (2 chars) and inner padding (2 chars)
+    const asciiWidth = 76; // OBSIDIANIZE ASCII art is exactly 76 chars wide
+    const leftPadding = Math.floor((innerWidth - asciiWidth) / 2);
+    const rightPadding = innerWidth - asciiWidth - leftPadding;
+    
     const centeredLines = lines.map((line) => {
-      const padding = Math.max(0, Math.floor((maxWidth - line.length) / 2));
-      return `${sideBorder} ${" ".repeat(padding)}${line}${" ".repeat(
-        maxWidth - line.length - padding
-      )} ${sideBorder}`;
+      return `${sideBorder} ${" ".repeat(leftPadding)}${line}${" ".repeat(rightPadding)} ${sideBorder}`;
     });
 
+    // Center the tagline relative to the ASCII art
+    const tagline = "✨ Your Knowledge, Crystallized ✨";
+    const taglinePadding = Math.floor((borderWidth - tagline.length) / 2);
+    const centeredTagline = " ".repeat(taglinePadding) + tagline;
+    
     // Build the complete styled output
     const plainOutput = [
       topBorder,
-      `${sideBorder}${" ".repeat(topBorder.length - 2)}${sideBorder}`,
+      `${sideBorder}${" ".repeat(borderWidth - 2)}${sideBorder}`,
       ...centeredLines,
-      `${sideBorder}${" ".repeat(topBorder.length - 2)}${sideBorder}`,
+      `${sideBorder}${" ".repeat(borderWidth - 2)}${sideBorder}`,
       bottomBorder,
       "",
-      "         ✨ Your Knowledge, Crystallized ✨",
+      centeredTagline,
       "",
     ].join("\n");
 
@@ -85,11 +93,11 @@ export const app = {
 <body>
   <div class="container">
     <pre class="border">${topBorder}</pre>
-    <pre class="border">${sideBorder}${" ".repeat(topBorder.length - 2)}${sideBorder}</pre>
+    <pre class="border">${sideBorder}${" ".repeat(borderWidth - 2)}${sideBorder}</pre>
 ${centeredLines.map(line => `    <pre><span class="border">${sideBorder}</span><span class="ascii-art">${line.slice(2, -2)}</span><span class="border">${sideBorder}</span></pre>`).join("\n")}
-    <pre class="border">${sideBorder}${" ".repeat(topBorder.length - 2)}${sideBorder}</pre>
+    <pre class="border">${sideBorder}${" ".repeat(borderWidth - 2)}${sideBorder}</pre>
     <pre class="border">${bottomBorder}</pre>
-    <div class="tagline">✨ Your Knowledge, Crystallized ✨</div>
+    <div class="tagline">${tagline}</div>
   </div>
 </body>
 </html>`;
