@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple-baseline">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidianize TUI - Theme Mockups</title>
+    
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="css/base.css">
+    
+    <!-- All Theme Styles -->
+    <link rel="stylesheet" href="css/purple-baseline.css">
+    <link rel="stylesheet" href="css/classic-green.css">
+    <link rel="stylesheet" href="css/modern-dark.css">
+    <link rel="stylesheet" href="css/high-contrast.css">
+    <link rel="stylesheet" href="css/warm-amber.css">
+    
+    <!-- Theme Switcher -->
+    <link rel="stylesheet" href="css/theme-switcher.css">
+    
+    <!-- Theme Signature Animations -->
+    <link rel="stylesheet" href="css/theme-animations.css">
+    
+    <meta name="description" content="Interactive theme mockups for Obsidianize TUI - AI-powered content processor with terminal aesthetics">
+    <meta name="keywords" content="terminal, TUI, themes, accessibility, design mockups">
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="sr-only sr-only-focusable" style="position: absolute; top: 10px; left: 10px; z-index: 9999; background: var(--theme-bg-secondary); color: var(--theme-text-primary); padding: 8px 12px; text-decoration: none; border-radius: 4px;">Skip to main content</a>
+    
+    <div class="terminal-container">
+        <!-- Header with ASCII Art -->
+        <header class="terminal-header" role="banner" aria-label="Application Header">
+            <div class="ascii-art-container">
+                <div class="border top">╔═══════════════════════════════════════════════════════════════════════════════════════════════╗</div>
+                <div class="border side">║                                                                                               ║</div>
+                <pre class="ascii-art" aria-label="OBSIDIANIZE ASCII Logo">║  ██████╗ ██████╗ ███████╗██╗██████╗ ██╗ █████╗ ███╗   ██╗██╗███████╗███████╗                ║
+║ ██╔═══██╗██╔══██╗██╔════╝██║██╔══██╗██║██╔══██╗████╗  ██║██║╚══███╔╝██╔════╝                ║
+║ ██║   ██║██████╔╝███████╗██║██║  ██║██║███████║██╔██╗ ██║██║  ███╔╝ █████╗                  ║
+║ ██║   ██║██╔══██╗╚════██║██║██║  ██║██║██╔══██║██║╚██╗██║██║ ███╔╝  ██╔══╝                  ║
+║ ╚██████╔╝██████╔╝███████║██║██████╔╝██║██║  ██║██║ ╚████║██║███████╗███████╗                ║
+║  ╚═════╝ ╚═════╝ ╚══════╝╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚══════╝                ║</pre>
+                <div class="border side">║                                                                                               ║</div>
+                <div class="border bottom">╚═══════════════════════════════════════════════════════════════════════════════════════════════╝</div>
+            </div>
+            
+            <div class="tagline" aria-label="Application tagline">✨ Your Knowledge, Crystallized ✨</div>
+            
+            <!-- Theme Information Banner -->
+            <div class="theme-banner" style="margin-top: 24px; padding: 16px; background-color: var(--theme-bg-secondary); border: 1px solid var(--theme-border); border-radius: 8px;">
+                <h2 style="color: var(--theme-accent-primary); font-size: 1.1em; margin-bottom: 8px; font-weight: 600;">Interactive Theme Preview</h2>
+                <p style="color: var(--theme-text-secondary); margin-bottom: 12px; line-height: 1.5;">
+                    Use the theme switcher in the top-right corner to preview all five Obsidianize TUI themes.
+                    Each theme showcases different color palettes and personalities while maintaining the core terminal aesthetic.
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px;">
+                    <span style="background: var(--theme-accent-primary); color: var(--theme-bg-primary); padding: 4px 8px; border-radius: 4px; font-weight: 500;">Live Theme Switching</span>
+                    <span style="background: var(--theme-success); color: var(--theme-bg-primary); padding: 4px 8px; border-radius: 4px; font-weight: 500;">Accessibility Verified</span>
+                    <span style="background: var(--theme-info); color: var(--theme-bg-primary); padding: 4px 8px; border-radius: 4px; font-weight: 500;">Keyboard Navigation</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Terminal Interface -->
+        <main class="terminal-main" role="main" aria-label="Terminal Interface" id="main-content">
+            
+            <!-- Command Prompt Section -->
+            <section class="command-section">
+                <div class="prompt-line">
+                    <span class="prompt" aria-label="Command prompt">obsidianize@web:~$</span>
+                    <span class="command">process https://youtube.com/watch?v=dQw4w9WgXcQ</span>
+                </div>
+            </section>
+
+            <!-- Processing Status Section -->
+            <section class="status-section" role="log" aria-live="polite" aria-label="Processing Status">
+                <div class="progress-container">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Processing progress">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-text">100% | Processing complete</span>
+                </div>
+                
+                <div class="status-items">
+                    <div class="status-item success">
+                        <span class="status-icon" role="img" aria-label="Success">✓</span>
+                        <span class="status-text">Content fetched from YouTube</span>
+                    </div>
+                    <div class="status-item success">
+                        <span class="status-icon" role="img" aria-label="Success">✓</span>
+                        <span class="status-text">AI analysis complete</span>
+                    </div>
+                    <div class="status-item success">
+                        <span class="status-icon" role="img" aria-label="Success">✓</span>
+                        <span class="status-text">Markdown generated</span>
+                    </div>
+                    <div class="status-item info">
+                        <span class="status-icon" role="img" aria-label="Info">→</span>
+                        <span class="status-text">Saved: <span class="filename">yt_rick-astley_never-gonna-give-you-up--dQw4w9WgXcQ.md</span></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Preview Section -->
+            <section class="preview-section" aria-label="Content Preview">
+                <div class="preview-container">
+                    <div class="border top">╔═ CONTENT PREVIEW ══════════════════════════════════════════════════════════════╗</div>
+                    <div class="preview-content">
+                        <div class="border side">║                                                                                ║</div>
+                        <div class="border side">║ <span class="markdown-h1"># Rick Astley - Never Gonna Give You Up</span>                                          ║</div>
+                        <div class="border side">║                                                                                ║</div>
+                        <div class="border side">║ <span class="markdown-h2">## TL;DR</span>                                                                       ║</div>
+                        <div class="border side">║ <span class="markdown-bullet">•</span> <span class="markdown-bold">**Classic 80s Hit**</span>: Iconic song that became an internet meme                          ║</div>
+                        <div class="border side">║ <span class="markdown-bullet">•</span> <span class="markdown-bold">**Rickrolling Phenomenon**</span>: Unexpected link redirects to this video                     ║</div>
+                        <div class="border side">║ <span class="markdown-bullet">•</span> <span class="markdown-bold">**Cultural Impact**</span>: One of the most recognizable songs of the internet age            ║</div>
+                        <div class="border side">║                                                                                ║</div>
+                        <div class="border side">║ <span class="markdown-h2">## Executive Summary</span>                                                           ║</div>
+                        <div class="border side">║ This 1987 music video features Rick Astley's debut single that later became...            ║</div>
+                        <div class="border side">║                                                                                ║</div>
+                    </div>
+                    <div class="border bottom">╚════════════════════════════════════════════════════════════════════════════════╝</div>
+                </div>
+            </section>
+
+            <!-- System Status Section -->
+            <section class="system-section" aria-label="System Status">
+                <div class="system-container">
+                    <div class="border top">╔═ SYSTEM STATUS ═══════════════════════════════════════════════════════════════╗</div>
+                    <div class="system-content">
+                        <div class="border side">║ <span class="status-indicator online" role="img" aria-label="Online">🟢</span> <span class="system-label">Gemini API Connection:</span> <span class="system-value">Healthy (142ms)</span>                                     ║</div>
+                        <div class="border side">║ <span class="status-indicator active" role="img" aria-label="Active">🔵</span> <span class="system-label">Processing Engine:</span> <span class="system-value">Ready</span>                                                   ║</div>
+                        <div class="border side">║ <span class="status-indicator warning" role="img" aria-label="Warning">🟡</span> <span class="system-label">Memory Usage:</span> <span class="system-value">67.3MB / 2.1GB</span>                                               ║</div>
+                        <div class="border side">║ <span class="status-indicator info" role="img" aria-label="Information">ℹ️</span> <span class="system-label">Session:</span> <span class="system-value timestamp">2024-10-11 19:33:45 UTC</span>                                          ║</div>
+                    </div>
+                    <div class="border bottom">╚═══════════════════════════════════════════════════════════════════════════════╝</div>
+                </div>
+            </section>
+
+            <!-- Error Example Section -->
+            <section class="error-section" aria-label="Error Example">
+                <div class="error-content">
+                    <div class="error-item">
+                        <span class="error-icon" role="img" aria-label="Error">✗</span>
+                        <span class="error-text">Error: Failed to process URL</span>
+                    </div>
+                    <div class="error-details">
+                        <div class="error-tree">
+                            <span class="tree-connector">├─</span>
+                            <span class="error-label">Cause:</span>
+                            <span class="error-value">Network timeout after 30s</span>
+                        </div>
+                        <div class="error-tree">
+                            <span class="tree-connector">├─</span>
+                            <span class="error-label">Code:</span>
+                            <span class="error-value">NETWORK_TIMEOUT</span>
+                        </div>
+                        <div class="error-tree">
+                            <span class="tree-connector">└─</span>
+                            <span class="error-label">Suggestion:</span>
+                            <span class="error-value">Check your internet connection and try again</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Command Prompt -->
+            <section class="command-section">
+                <div class="prompt-line">
+                    <span class="prompt" aria-label="Command prompt">obsidianize@web:~$</span>
+                    <span class="cursor" aria-hidden="true">█</span>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Theme Information Footer -->
+        <footer class="theme-info" role="contentinfo">
+            <div class="theme-details">
+                <h3 id="current-theme-title">Interactive Theme Preview</h3>
+                <p class="theme-description" id="current-theme-description">Switch themes using the dropdown in the top-right corner to see how each design looks and feels. All themes preserve the core ASCII art and terminal aesthetics while offering distinct visual personalities.</p>
+                
+                <!-- Individual Theme Links -->
+                <div style="margin: 20px 0;">
+                    <h4 style="color: var(--theme-accent-primary); font-size: 1em; margin-bottom: 12px;">Individual Theme Pages:</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <a href="purple-baseline.html" style="color: var(--theme-accent-secondary); text-decoration: none; padding: 6px 12px; border: 1px solid var(--theme-accent-secondary); border-radius: 4px; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='var(--theme-accent-secondary)'; this.style.color='var(--theme-bg-primary)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-accent-secondary)'">Purple Baseline</a>
+                        <a href="classic-green.html" style="color: var(--theme-accent-secondary); text-decoration: none; padding: 6px 12px; border: 1px solid var(--theme-accent-secondary); border-radius: 4px; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='var(--theme-accent-secondary)'; this.style.color='var(--theme-bg-primary)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-accent-secondary)'">Classic Green</a>
+                        <a href="modern-dark.html" style="color: var(--theme-accent-secondary); text-decoration: none; padding: 6px 12px; border: 1px solid var(--theme-accent-secondary); border-radius: 4px; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='var(--theme-accent-secondary)'; this.style.color='var(--theme-bg-primary)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-accent-secondary)'">Modern Dark</a>
+                        <a href="high-contrast.html" style="color: var(--theme-accent-secondary); text-decoration: none; padding: 6px 12px; border: 1px solid var(--theme-accent-secondary); border-radius: 4px; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='var(--theme-accent-secondary)'; this.style.color='var(--theme-bg-primary)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-accent-secondary)'">High Contrast</a>
+                        <a href="warm-amber.html" style="color: var(--theme-accent-secondary); text-decoration: none; padding: 6px 12px; border: 1px solid var(--theme-accent-secondary); border-radius: 4px; font-size: 12px; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='var(--theme-accent-secondary)'; this.style.color='var(--theme-bg-primary)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-accent-secondary)'">Warm Amber</a>
+                    </div>
+                </div>
+                
+                <div class="theme-colors">
+                    <div class="color-sample bg-primary" title="Primary Background" tabindex="0"></div>
+                    <div class="color-sample text-primary" title="Primary Text" tabindex="0"></div>
+                    <div class="color-sample accent-primary" title="Primary Accent" tabindex="0"></div>
+                    <div class="color-sample accent-secondary" title="Secondary Accent" tabindex="0"></div>
+                    <div class="color-sample success" title="Success Color" tabindex="0"></div>
+                    <div class="color-sample error" title="Error Color" tabindex="0"></div>
+                </div>
+                
+                <!-- Usage Instructions -->
+                <div style="margin-top: 24px; padding: 16px; background: var(--theme-bg-tertiary); border-radius: 6px; font-size: 13px; line-height: 1.5;">
+                    <h4 style="color: var(--theme-accent-primary); margin-bottom: 8px;">How to Use:</h4>
+                    <ul style="color: var(--theme-text-secondary); margin: 0; padding-left: 20px;">
+                        <li>Click the theme switcher (🎨) in the top-right corner</li>
+                        <li>Use keyboard shortcut <kbd style="background: var(--theme-bg-secondary); padding: 2px 6px; border-radius: 3px; font-size: 11px;">Ctrl+Shift+T</kbd> to open theme menu</li>
+                        <li>Navigate with arrow keys, select with Enter/Space</li>
+                        <li>Your theme preference is saved automatically</li>
+                        <li>Visit individual theme pages for standalone views</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Theme Switcher JavaScript -->
+    <script src="js/theme-switcher.js"></script>
+    
+    <!-- Animation Toggle Button -->
+    <button class="animation-toggle" id="animation-toggle" aria-label="Toggle animations">
+        <span class="animation-toggle__icon">✨</span>
+        <span class="animation-toggle__text">Animations ON</span>
+    </button>
+    
+    <!-- Theme Change Handler -->
+    <script>
+        document.addEventListener('theme-changed', (e) => {
+            const { theme, themeData } = e.detail;
+            
+            // Update theme info in footer
+            const titleEl = document.getElementById('current-theme-title');
+            const descEl = document.getElementById('current-theme-description');
+            
+            if (titleEl && descEl) {
+                titleEl.textContent = `${themeData.displayName} - "${themeData.codename}"`;
+                descEl.textContent = themeData.description;
+            }
+            
+            // Add body class for any theme-specific adjustments
+            document.body.className = `theme-${theme}`;
+            
+            // Optional: Log theme change for analytics
+            console.log(`Theme switched to: ${themeData.displayName}`);
+        });
+        
+        // Initialize theme info on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Trigger initial theme change event
+            const savedTheme = localStorage.getItem('obsidianize-theme-mockup') || 'purple-baseline';
+            const event = new CustomEvent('theme-changed', {
+                detail: { 
+                    theme: savedTheme,
+                    themeData: {
+                        displayName: 'Purple Baseline',
+                        codename: 'Mystic Terminal',
+                        description: 'Sophisticated purple theme with modern aesthetics'
+                    }
+                }
+            });
+            document.dispatchEvent(event);
+        });
+        
+        // Animation Toggle Functionality
+        const animationToggle = document.getElementById('animation-toggle');
+        const toggleIcon = animationToggle.querySelector('.animation-toggle__icon');
+        const toggleText = animationToggle.querySelector('.animation-toggle__text');
+        
+        let animationsEnabled = true;
+        
+        // Check for saved animation preference
+        const savedAnimationState = localStorage.getItem('obsidianize-animations-enabled');
+        if (savedAnimationState !== null) {
+            animationsEnabled = savedAnimationState === 'true';
+            updateAnimationState();
+        }
+        
+        animationToggle.addEventListener('click', () => {
+            animationsEnabled = !animationsEnabled;
+            updateAnimationState();
+            localStorage.setItem('obsidianize-animations-enabled', animationsEnabled.toString());
+            
+            // Announce to screen readers
+            const announcement = document.getElementById('theme-announcer');
+            if (announcement) {
+                announcement.textContent = animationsEnabled ? 
+                    'Signature animations enabled' : 'Signature animations disabled';
+            }
+        });
+        
+        function updateAnimationState() {
+            if (animationsEnabled) {
+                document.body.classList.remove('animations-disabled');
+                toggleIcon.textContent = '✨';
+                toggleText.textContent = 'Animations ON';
+                animationToggle.setAttribute('aria-label', 'Disable animations');
+            } else {
+                document.body.classList.add('animations-disabled');
+                toggleIcon.textContent = '⏸️';
+                toggleText.textContent = 'Animations OFF';
+                animationToggle.setAttribute('aria-label', 'Enable animations');
+            }
+        }
+        
+        // Animation keyboard shortcut (Alt + A)
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key === 'a') {
+                e.preventDefault();
+                animationToggle.click();
+            }
+        });
+    </script>
+</body>
+</html>

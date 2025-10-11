@@ -1,0 +1,122 @@
+/* Theme 3: Modern Dark - "Digital Ocean" */
+
+:root[data-theme="modern-dark"] {
+  /* Background colors */
+  --theme-bg-primary: #1e1e2e;
+  --theme-bg-secondary: #262638;
+  --theme-bg-tertiary: #313244;
+  
+  /* Text colors */
+  --theme-text-primary: #cdd6f4;
+  --theme-text-secondary: #a6adc8;
+  --theme-text-muted: #9399b2;
+  
+  /* Accent colors */
+  --theme-accent-primary: #89b4fa;
+  --theme-accent-secondary: #74c7ec;
+  --theme-accent-tertiary: #b4befe;
+  
+  /* Semantic colors */
+  --theme-border: #89b4fa;
+  --theme-ascii-art: #74c7ec;
+  --theme-tagline: #b4befe;
+  --theme-prompt: #89b4fa;
+  --theme-cursor: #89b4fa;
+  
+  /* Status colors */
+  --theme-success: #a6e3a1;
+  --theme-warning: #f9e2af;
+  --theme-error: #f38ba8;
+  --theme-info: #89dceb;
+  
+  /* Syntax highlighting */
+  --theme-syntax-keyword: #f38ba8;
+  --theme-syntax-string: #a6e3a1;
+  --theme-syntax-number: #fab387;
+  --theme-syntax-comment: #6c7086;
+  --theme-syntax-type: #fab387;
+  --theme-syntax-function: #89dceb;
+  
+  /* Interactive states */
+  --theme-hover: #94c5f7;
+  --theme-active: #7aa2f7;
+  --theme-focus: #89b4fa;
+  --theme-selection: rgba(137, 180, 250, 0.3);
+}
+
+/* Theme-specific enhancements */
+html[data-theme="modern-dark"] body {
+  background-color: var(--theme-bg-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Roboto Mono', monospace;
+  font-feature-settings: 'liga' 1, 'calt' 1; /* Enable ligatures for modern fonts */
+}
+
+html[data-theme="modern-dark"] .ascii-art {
+  font-weight: 600; /* Semi-bold for modern clarity */
+}
+
+html[data-theme="modern-dark"] .tagline {
+  font-weight: 400;
+}
+
+/* Modern theme specific progress bar with gradient */
+html[data-theme="modern-dark"] .progress-fill {
+  background: linear-gradient(90deg, var(--theme-accent-primary), var(--theme-accent-secondary));
+  border-radius: 2px;
+}
+
+/* Modern enhancements */
+html[data-theme="modern-dark"] .terminal-container {
+  /* Subtle box shadow for depth */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  
+  /* Better text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Syntax highlighting support for code examples */
+html[data-theme="modern-dark"] .code-keyword { 
+  color: var(--theme-syntax-keyword); 
+}
+
+html[data-theme="modern-dark"] .code-string { 
+  color: var(--theme-syntax-string); 
+}
+
+html[data-theme="modern-dark"] .code-number { 
+  color: var(--theme-syntax-number); 
+}
+
+html[data-theme="modern-dark"] .code-comment { 
+  color: var(--theme-syntax-comment); 
+  font-style: italic; 
+}
+
+html[data-theme="modern-dark"] .code-type { 
+  color: var(--theme-syntax-type); 
+}
+
+html[data-theme="modern-dark"] .code-function { 
+  color: var(--theme-syntax-function); 
+}
+
+/* Modern interactive states */
+html[data-theme="modern-dark"] .color-sample:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Smooth scrolling for modern experience */
+html[data-theme="modern-dark"] .terminal-container {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced line spacing for modern screens */
+html[data-theme="modern-dark"] body {
+  line-height: 1.4;
+}
+
+html[data-theme="modern-dark"] .theme-description {
+  line-height: 1.6; /* Comfortable reading for modern screens */
+}

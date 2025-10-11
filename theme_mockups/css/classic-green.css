@@ -1,0 +1,102 @@
+/* Theme 2: Classic Green Terminal - "Retro Matrix" */
+
+:root[data-theme="classic-green"] {
+  /* Background colors */
+  --theme-bg-primary: #000000;
+  --theme-bg-secondary: #0a0a0a;
+  --theme-bg-tertiary: #111111;
+  
+  /* Text colors */
+  --theme-text-primary: #00ff00;
+  --theme-text-secondary: #00cc00;
+  --theme-text-muted: #009900;
+  
+  /* Accent colors */
+  --theme-accent-primary: #00ff41;
+  --theme-accent-secondary: #00aa00;
+  --theme-accent-tertiary: #00ff88;
+  
+  /* Semantic colors */
+  --theme-border: #00ff41;
+  --theme-ascii-art: #00aa00;
+  --theme-tagline: #00ff88;
+  --theme-prompt: #00ff41;
+  --theme-cursor: #00ff41;
+  
+  /* Status colors */
+  --theme-success: #00ff00;
+  --theme-warning: #ffff00;
+  --theme-error: #ff0000;
+  --theme-info: #00ffff;
+  
+  /* Interactive states */
+  --theme-hover: #44ff44;
+  --theme-active: #00cc00;
+  --theme-focus: #00ff41;
+  --theme-selection: rgba(0, 255, 65, 0.3);
+}
+
+/* Theme-specific enhancements */
+html[data-theme="classic-green"] body {
+  background-color: var(--theme-bg-primary);
+  /* Subtle CRT glow effect */
+  text-shadow: 0 0 2px currentColor;
+}
+
+html[data-theme="classic-green"] .ascii-art {
+  font-weight: normal; /* Less bold for authentic terminal feel */
+  text-shadow: 0 0 3px currentColor; /* Slightly stronger glow for ASCII */
+}
+
+html[data-theme="classic-green"] .border {
+  text-shadow: 0 0 2px currentColor;
+}
+
+html[data-theme="classic-green"] .tagline {
+  text-shadow: 0 0 4px currentColor;
+}
+
+/* Classic green theme specific progress bar */
+html[data-theme="classic-green"] .progress-fill {
+  background: var(--theme-accent-primary);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+/* CRT Monitor Effects (Optional Enhancement) */
+html[data-theme="classic-green"] .terminal-container {
+  position: relative;
+  /* Scanline effect */
+  background-image: 
+    linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+  background-size: 100% 4px;
+  
+  /* Screen curvature */
+  border-radius: 15px;
+  
+  /* Subtle screen flicker animation */
+  animation: flicker 3s infinite linear;
+}
+
+@keyframes flicker {
+  0%, 99%, 100% { opacity: 1; }
+  99.5% { opacity: 0.98; }
+}
+
+/* Enhanced cursor blinking for visibility */
+html[data-theme="classic-green"] .cursor {
+  animation: cursor-blink-green 1s infinite;
+  background-color: var(--theme-cursor);
+  color: var(--theme-bg-primary);
+  font-weight: 700;
+}
+
+@keyframes cursor-blink-green {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Authentic terminal font preference */
+html[data-theme="classic-green"] body {
+  font-family: 'Courier New', 'Monaco', 'Menlo', 'Liberation Mono', 'Consolas', monospace;
+  line-height: 1.4; /* Slightly tighter for classic terminal feel */
+}
