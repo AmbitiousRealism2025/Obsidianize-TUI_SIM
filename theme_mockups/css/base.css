@@ -1,0 +1,450 @@
+/* Base CSS for Obsidianize TUI Theme Mockups */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 14px;
+    line-height: 1.4;
+    height: 100%;
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', 'Monaco', 'Menlo', monospace;
+    background-color: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+    height: 100%;
+    overflow-x: auto;
+    padding: 20px;
+    
+    /* Enhanced text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Terminal Container */
+.terminal-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ASCII Art Header */
+.terminal-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.ascii-art-container {
+    margin-bottom: 20px;
+}
+
+.ascii-art {
+    color: var(--theme-ascii-art);
+    font-weight: 600;
+    white-space: pre;
+    line-height: 1.0;
+    margin: 0;
+    font-size: 1em;
+}
+
+.tagline {
+    color: var(--theme-tagline);
+    font-size: 1.1em;
+    margin-top: 16px;
+    font-weight: 400;
+}
+
+/* Border Elements */
+.border {
+    color: var(--theme-border);
+    font-weight: 500;
+}
+
+/* Main Terminal Interface */
+.terminal-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Command Section */
+.command-section {
+    margin: 8px 0;
+}
+
+.prompt-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.prompt {
+    color: var(--theme-prompt);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.command {
+    color: var(--theme-text-primary);
+    word-break: break-all;
+}
+
+.cursor {
+    color: var(--theme-cursor);
+    font-weight: 700;
+    animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Status Section */
+.status-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.progress-bar {
+    flex: 1;
+    min-width: 200px;
+    height: 20px;
+    background-color: var(--theme-bg-secondary);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--theme-accent-primary);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    color: var(--theme-text-primary);
+    flex-shrink: 0;
+}
+
+.status-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 0;
+}
+
+.status-icon {
+    flex-shrink: 0;
+    font-weight: 600;
+    width: 16px;
+    text-align: center;
+}
+
+.status-item.success .status-icon {
+    color: var(--theme-success);
+}
+
+.status-item.info .status-icon {
+    color: var(--theme-accent-primary);
+}
+
+.status-item.warning .status-icon {
+    color: var(--theme-warning);
+}
+
+.status-item.error .status-icon {
+    color: var(--theme-error);
+}
+
+.filename {
+    color: var(--theme-accent-tertiary);
+    font-style: italic;
+}
+
+/* Preview Section */
+.preview-section {
+    margin: 16px 0;
+}
+
+.preview-container {
+    font-family: inherit;
+}
+
+.preview-content .border {
+    margin: 1px 0;
+}
+
+.markdown-h1 {
+    color: var(--theme-accent-primary);
+    font-weight: 600;
+}
+
+.markdown-h2 {
+    color: var(--theme-accent-primary);
+    font-weight: 600;
+}
+
+.markdown-bullet {
+    color: var(--theme-accent-secondary);
+    font-weight: 600;
+}
+
+.markdown-bold {
+    color: var(--theme-accent-tertiary);
+    font-weight: 600;
+}
+
+/* System Section */
+.system-section {
+    margin: 16px 0;
+}
+
+.system-content .border {
+    margin: 1px 0;
+    display: flex;
+    align-items: center;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+}
+
+.system-label {
+    color: var(--theme-accent-primary);
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.system-value {
+    color: var(--theme-text-primary);
+    margin-left: 8px;
+}
+
+.timestamp {
+    color: var(--theme-accent-secondary);
+    font-family: inherit;
+}
+
+/* Error Section */
+.error-section {
+    margin: 16px 0;
+    padding: 12px 0;
+}
+
+.error-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.error-icon {
+    color: var(--theme-error);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.error-text {
+    color: var(--theme-error);
+    font-weight: 500;
+}
+
+.error-details {
+    margin-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.error-tree {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tree-connector {
+    color: var(--theme-text-secondary);
+    flex-shrink: 0;
+    width: 20px;
+}
+
+.error-label {
+    color: var(--theme-accent-primary);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.error-value {
+    color: var(--theme-text-primary);
+}
+
+/* Theme Information Footer */
+.theme-info {
+    margin-top: 40px;
+    padding: 24px 0;
+    border-top: 1px solid var(--theme-accent-primary);
+    background-color: var(--theme-bg-secondary);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.theme-details h3 {
+    color: var(--theme-accent-primary);
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.theme-description {
+    color: var(--theme-text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.theme-colors {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.color-sample {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: 2px solid var(--theme-border);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.color-sample:hover {
+    transform: scale(1.1);
+}
+
+.color-sample.bg-primary {
+    background-color: var(--theme-bg-primary);
+}
+
+.color-sample.text-primary {
+    background-color: var(--theme-text-primary);
+}
+
+.color-sample.accent-primary {
+    background-color: var(--theme-accent-primary);
+}
+
+.color-sample.accent-secondary {
+    background-color: var(--theme-accent-secondary);
+}
+
+.color-sample.success {
+    background-color: var(--theme-success);
+}
+
+.color-sample.error {
+    background-color: var(--theme-error);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    html {
+        font-size: 13px;
+    }
+    
+    body {
+        padding: 12px;
+    }
+    
+    .terminal-container {
+        gap: 16px;
+    }
+    
+    .prompt-line {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .progress-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .theme-colors {
+        gap: 8px;
+    }
+    
+    .color-sample {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 12px;
+    }
+    
+    .ascii-art {
+        font-size: 0.8em;
+        overflow-x: auto;
+    }
+    
+    .terminal-main {
+        gap: 12px;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus indicators */
+.color-sample:focus {
+    outline: 2px solid var(--theme-accent-primary);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .theme-info {
+        break-inside: avoid;
+    }
+}

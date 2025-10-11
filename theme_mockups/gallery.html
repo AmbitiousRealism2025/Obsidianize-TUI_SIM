@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidianize TUI - Theme Gallery</title>
+    <meta name="description" content="Interactive gallery showcasing all 5 theme variations for the Obsidianize TUI interface">
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/theme-animations.css">
+    
+    <style>
+        /* Gallery-specific styles */
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            margin: 0;
+            padding: 20px;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gallery-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #c084fc, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+        }
+        
+        .gallery-subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+        
+        .gallery-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .theme-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .theme-preview {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .theme-preview iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            transform: scale(0.5);
+            transform-origin: 0 0;
+            pointer-events: none;
+        }
+        
+        .theme-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                transparent 60%,
+                rgba(0, 0, 0, 0.7) 100%
+            );
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+        }
+        
+        .theme-info {
+            padding: 1.5rem;
+        }
+        
+        .theme-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f1f5f9;
+        }
+        
+        .theme-codename {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-family: monospace;
+            margin-bottom: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .theme-description {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        
+        .theme-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .comparison-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .comparison-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+            text-align: center;
+        }
+        
+        .comparison-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .comparison-view {
+            height: 600px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #000;
+        }
+        
+        .comparison-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+        
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-title {
+                font-size: 2rem;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .comparison-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-header">
+        <h1 class="gallery-title">✨ Obsidianize TUI Theme Gallery ✨</h1>
+        <p class="gallery-subtitle">Interactive showcase of all 5 theme variations</p>
+        <p class="gallery-description">
+            Explore different visual styles for the Obsidianize terminal interface. 
+            Each theme is carefully crafted with accessibility, readability, and aesthetic appeal in mind.
+        </p>
+    </div>
+
+    <div class="theme-grid">
+        <!-- Purple Baseline Theme -->
+        <div class="theme-card">
+            <div class="theme-preview">
+                <iframe src="purple-baseline.html" title="Purple Baseline Theme Preview"></iframe>
+                <div class="theme-overlay"></div>
+            </div>
+            <div class="theme-info">
+                <h3 class="theme-name">Purple Baseline</h3>
+                <div class="theme-codename">PURPLE_BASELINE</div>
+                <p class="theme-description">
+                    The current sophisticated theme with deep purple-blue background and elegant purple accents. 
+                    Perfect for professional use with a modern, polished appearance.
+                </p>
+                <div class="theme-actions">
+                    <a href="purple-baseline.html" class="btn btn-primary" target="_blank">
+                        👁️ View Full Theme
+                    </a>
+                    <a href="../design_references/purple-baseline.md" class="btn btn-secondary">
+                        📝 Design Specs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Classic Green Terminal -->
+        <div class="theme-card">
+            <div class="theme-preview">
+                <iframe src="classic-green.html" title="Classic Green Terminal Preview"></iframe>
+                <div class="theme-overlay"></div>
+            </div>
+            <div class="theme-info">
+                <h3 class="theme-name">Classic Green Terminal</h3>
+                <div class="theme-codename">CLASSIC_GREEN</div>
+                <p class="theme-description">
+                    Authentic retro green-on-black terminal style with CRT glow effects. 
+                    Inspired by VT100 terminals and classic hacker aesthetics.
+                </p>
+                <div class="theme-actions">
+                    <a href="classic-green.html" class="btn btn-primary" target="_blank">
+                        👁️ View Full Theme
+                    </a>
+                    <a href="../design_references/classic-green-terminal.md" class="btn btn-secondary">
+                        📝 Design Specs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Dark -->
+        <div class="theme-card">
+            <div class="theme-preview">
+                <iframe src="modern-dark.html" title="Modern Dark Theme Preview"></iframe>
+                <div class="theme-overlay"></div>
+            </div>
+            <div class="theme-info">
+                <h3 class="theme-name">Modern Dark</h3>
+                <div class="theme-codename">MODERN_DARK</div>
+                <p class="theme-description">
+                    Contemporary dark theme with blue-cyan palette reminiscent of modern IDEs. 
+                    Enhanced syntax highlighting and developer-friendly aesthetics.
+                </p>
+                <div class="theme-actions">
+                    <a href="modern-dark.html" class="btn btn-primary" target="_blank">
+                        👁️ View Full Theme
+                    </a>
+                    <a href="../design_references/modern-dark.md" class="btn btn-secondary">
+                        📝 Design Specs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- High Contrast -->
+        <div class="theme-card">
+            <div class="theme-preview">
+                <iframe src="high-contrast.html" title="High Contrast Theme Preview"></iframe>
+                <div class="theme-overlay"></div>
+            </div>
+            <div class="theme-info">
+                <h3 class="theme-name">High Contrast</h3>
+                <div class="theme-codename">HIGH_CONTRAST</div>
+                <p class="theme-description">
+                    Maximum accessibility theme with WCAG AAA contrast ratios. 
+                    Bright colors on dark backgrounds for users with visual impairments.
+                </p>
+                <div class="theme-actions">
+                    <a href="high-contrast.html" class="btn btn-primary" target="_blank">
+                        👁️ View Full Theme
+                    </a>
+                    <a href="../design_references/high-contrast.md" class="btn btn-secondary">
+                        📝 Design Specs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warm Terminal -->
+        <div class="theme-card">
+            <div class="theme-preview">
+                <iframe src="warm-amber.html" title="Warm Terminal Theme Preview"></iframe>
+                <div class="theme-overlay"></div>
+            </div>
+            <div class="theme-info">
+                <h3 class="theme-name">Warm Terminal</h3>
+                <div class="theme-codename">WARM_AMBER</div>
+                <p class="theme-description">
+                    Cozy amber and orange tones create a warm, comfortable atmosphere. 
+                    Optimized for evening use and reduced blue light exposure.
+                </p>
+                <div class="theme-actions">
+                    <a href="warm-amber.html" class="btn btn-primary" target="_blank">
+                        👁️ View Full Theme
+                    </a>
+                    <a href="../design_references/warm-terminal.md" class="btn btn-secondary">
+                        📝 Design Specs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Comparison Section -->
+    <div class="comparison-section">
+        <h2 class="comparison-title">🔄 Interactive Theme Comparison</h2>
+        <div class="comparison-tabs">
+            <button class="tab-btn active" onclick="switchTheme('purple-baseline.html', this)">Purple Baseline</button>
+            <button class="tab-btn" onclick="switchTheme('classic-green.html', this)">Classic Green</button>
+            <button class="tab-btn" onclick="switchTheme('modern-dark.html', this)">Modern Dark</button>
+            <button class="tab-btn" onclick="switchTheme('high-contrast.html', this)">High Contrast</button>
+            <button class="tab-btn" onclick="switchTheme('warm-amber.html', this)">Warm Terminal</button>
+        </div>
+        <div class="comparison-view">
+            <iframe id="comparison-iframe" class="comparison-iframe" src="purple-baseline.html" title="Theme Comparison View"></iframe>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            🎨 <strong>Obsidianize TUI Theme Gallery</strong> | 
+            <a href="index.html">Interactive Theme Switcher</a> | 
+            <a href="../design_references/theme-implementation-guide.md">Implementation Guide</a> | 
+            <a href="../README.md">Project Documentation</a>
+        </p>
+        <p>
+            Built with ❤️ for accessible, beautiful terminal interfaces
+        </p>
+    </div>
+
+    <script>
+        function switchTheme(themePath, buttonElement) {
+            // Update iframe source
+            const iframe = document.getElementById('comparison-iframe');
+            iframe.src = themePath;
+            
+            // Update active tab
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttonElement.classList.add('active');
+            
+            // Add loading state
+            iframe.style.opacity = '0.5';
+            iframe.onload = function() {
+                iframe.style.opacity = '1';
+            };
+        }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const activeTab = document.querySelector('.tab-btn.active');
+            const currentIndex = Array.from(tabs).indexOf(activeTab);
+            
+            if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
+                tabs[currentIndex + 1].click();
+                tabs[currentIndex + 1].focus();
+            } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                tabs[currentIndex - 1].click();
+                tabs[currentIndex - 1].focus();
+            }
+        });
+        
+        // Add smooth transitions for preview iframes
+        document.addEventListener('DOMContentLoaded', function() {
+            const previewIframes = document.querySelectorAll('.theme-preview iframe');
+            previewIframes.forEach(iframe => {
+                iframe.style.transition = 'opacity 0.3s ease';
+            });
+        });
+    </script>
+</body>
+</html>

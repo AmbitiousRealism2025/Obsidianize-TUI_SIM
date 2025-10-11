@@ -1,0 +1,160 @@
+/* Theme 4: High Contrast - "Crystal Clear" */
+
+:root[data-theme="high-contrast"] {
+  /* Background colors */
+  --theme-bg-primary: #000000;
+  --theme-bg-secondary: #1a1a1a;
+  --theme-bg-tertiary: #2d2d2d;
+  
+  /* Text colors */
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #e0e0e0;
+  --theme-text-muted: #cccccc;
+  
+  /* Accent colors */
+  --theme-accent-primary: #ffff00;
+  --theme-accent-secondary: #00ffff;
+  --theme-accent-tertiary: #ffffff;
+  
+  /* Semantic colors */
+  --theme-border: #ffff00;
+  --theme-ascii-art: #00ffff;
+  --theme-tagline: #ffffff;
+  --theme-prompt: #ffff00;
+  --theme-cursor: #ffff00;
+  
+  /* Status colors */
+  --theme-success: #00ff00;
+  --theme-warning: #ffff00;
+  --theme-error: #ff0000;
+  --theme-info: #00ffff;
+  
+  /* Additional accessibility colors */
+  --theme-focus: #ff00ff;    /* Magenta for maximum visibility */
+  --theme-visited: #bb88ff;  /* Light purple for visited links */
+  --theme-selected: #ffffff; /* White for selected text background */
+  
+  /* Interactive states */
+  --theme-hover: #ffff88;
+  --theme-active: #ffffaa;
+  --theme-focus-outline: #ff00ff;
+  --theme-selection: rgba(255, 255, 255, 0.3);
+}
+
+/* Theme-specific enhancements */
+html[data-theme="high-contrast"] body {
+  font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'Courier New', monospace;
+  font-size: 16px; /* Larger base font size */
+  font-weight: 500; /* Medium weight for better visibility */
+  line-height: 1.8; /* Generous line spacing */
+  
+  /* Enhanced text rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: auto; /* Use system font smoothing for clarity */
+  -moz-osx-font-smoothing: auto;
+}
+
+html[data-theme="high-contrast"] .ascii-art {
+  font-weight: 700; /* Bold for maximum impact */
+  line-height: 1.2; /* Slight spacing for ASCII art */
+}
+
+html[data-theme="high-contrast"] .border {
+  font-weight: 600; /* Semi-bold borders */
+}
+
+html[data-theme="high-contrast"] .tagline {
+  font-size: 18px; /* Larger tagline */
+  font-weight: 600;
+  margin: 24px 0; /* More generous margins */
+}
+
+/* Enhanced focus indicators */
+html[data-theme="high-contrast"] *:focus {
+  outline: 3px solid var(--theme-focus-outline);
+  outline-offset: 2px;
+  background-color: var(--theme-bg-secondary);
+}
+
+/* Selection highlighting */
+html[data-theme="high-contrast"] *::selection {
+  background-color: var(--theme-selected);
+  color: var(--theme-bg-primary);
+}
+
+/* Enhanced button styles */
+html[data-theme="high-contrast"] .color-sample {
+  border: 2px solid var(--theme-accent-primary);
+  min-height: 44px; /* WCAG minimum touch target size */
+  min-width: 44px;
+  padding: 12px 20px; /* Larger touch targets */
+}
+
+html[data-theme="high-contrast"] .color-sample:hover {
+  background-color: var(--theme-accent-primary);
+  color: var(--theme-bg-primary);
+  transform: scale(1.05); /* Subtle size increase on hover */
+}
+
+html[data-theme="high-contrast"] .color-sample:active {
+  transform: scale(0.95);
+  outline: 4px solid var(--theme-focus-outline);
+}
+
+/* Enhanced cursor blinking for visibility */
+html[data-theme="high-contrast"] .cursor {
+  animation: cursor-blink-high-contrast 1s infinite;
+  background-color: var(--theme-cursor);
+  color: var(--theme-bg-primary);
+  font-weight: 700;
+}
+
+@keyframes cursor-blink-high-contrast {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* High contrast progress bar */
+html[data-theme="high-contrast"] .progress-fill {
+  background: var(--theme-accent-primary);
+  border: 2px solid var(--theme-text-primary);
+}
+
+/* Accessibility: Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="high-contrast"] * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Enhanced contrast for all interactive elements */
+html[data-theme="high-contrast"] .terminal-container {
+  border: 2px solid var(--theme-accent-primary);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+/* Larger, clearer spacing for readability */
+html[data-theme="high-contrast"] .terminal-main {
+  gap: 24px;
+}
+
+html[data-theme="high-contrast"] .status-section {
+  gap: 16px;
+}
+
+html[data-theme="high-contrast"] .status-items {
+  gap: 8px;
+}
+
+/* Enhanced visibility for system status */
+html[data-theme="high-contrast"] .system-label {
+  font-weight: 700;
+}
+
+html[data-theme="high-contrast"] .error-label {
+  font-weight: 700;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple-baseline">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidianize TUI - Purple Baseline DEMO</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/purple-baseline.css">
+    <link rel="stylesheet" href="css/theme-animations.css">
+    <link rel="stylesheet" href="css/demo-mode-animations.css">
+</head>
+<body>
+    <div class="terminal-container">
+        <!-- Header with ASCII Art -->
+        <header class="terminal-header" role="banner" aria-label="Application Header">
+            <div class="ascii-art-container">
+                <div class="border top">╔═══════════════════════════════════════════════════════════════════════════════════════════════╗</div>
+                <div class="border side">║                                                                                               ║</div>
+                <pre class="ascii-art" aria-label="OBSIDIANIZE ASCII Logo">║  ██████╗ ██████╗ ███████╗██╗██████╗ ██╗ █████╗ ███╗   ██╗██╗███████╗███████╗                ║
+║ ██╔═══██╗██╔══██╗██╔════╝██║██╔══██╗██║██╔══██╗████╗  ██║██║╚══███╔╝██╔════╝                ║
+║ ██║   ██║██████╔╝███████╗██║██║  ██║██║███████║██╔██╗ ██║██║  ███╔╝ █████╗                  ║
+║ ██║   ██║██╔══██╗╚════██║██║██║  ██║██║██╔══██║██║╚██╗██║██║ ███╔╝  ██╔══╝                  ║
+║ ╚██████╔╝██████╔╝███████║██║██████╔╝██║██║  ██║██║ ╚████║██║███████╗███████╗                ║
+║  ╚═════╝ ╚═════╝ ╚══════╝╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚══════╝                ║</pre>
+                <div class="border side">║                                                                                               ║</div>
+                <div class="border bottom">╚═══════════════════════════════════════════════════════════════════════════════════════════════╝</div>
+            </div>
+            
+            <div class="tagline" aria-label="Application tagline">✨ Your Knowledge, Crystallized ✨</div>
+        </header>
+
+        <!-- Main Terminal Interface -->
+        <main class="terminal-main" role="main" aria-label="Terminal Interface">
+            
+            <!-- Command Prompt Section -->
+            <section class="command-section">
+                <div class="prompt-line">
+                    <span class="prompt" aria-label="Command prompt">obsidianize@web:~$</span>
+                    <span class="command">process https://youtube.com/watch?v=dQw4w9WgXcQ</span>
+                </div>
+            </section>
+
+            <!-- Processing Status Section -->
+            <section class="status-section" role="log" aria-live="polite" aria-label="Processing Status">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-text">100% | Processing complete</span>
+                </div>
+                
+                <div class="status-items">
+                    <div class="status-item success">
+                        <span class="status-icon">✓</span>
+                        <span class="status-text">Content fetched from YouTube</span>
+                    </div>
+                    <div class="status-item success">
+                        <span class="status-icon">✓</span>
+                        <span class="status-text">AI analysis complete</span>
+                    </div>
+                    <div class="status-item success">
+                        <span class="status-icon">✓</span>
+                        <span class="status-text">Markdown generated</span>
+                    </div>
+                    <div class="status-item info">
+                        <span class="status-icon">→</span>
+                        <span class="status-text">Saved: <span class="filename">yt_rick-astley_never-gonna-give-you-up--dQw4w9WgXcQ.md</span></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Command Prompt -->
+            <section class="command-section">
+                <div class="prompt-line">
+                    <span class="prompt" aria-label="Command prompt">obsidianize@web:~$</span>
+                    <span class="cursor">█</span>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Theme Information Footer -->
+        <footer class="theme-info">
+            <div class="theme-details">
+                <h3>Purple Baseline - DEMO MODE</h3>
+                <p class="theme-description">Enhanced animation showcase with stronger mystic pulse effects, dramatic glows, and pronounced scaling. The purple aura should be clearly visible around the terminal container.</p>
+                <div class="theme-colors">
+                    <div class="color-sample bg-primary" title="Primary Background"></div>
+                    <div class="color-sample text-primary" title="Primary Text"></div>
+                    <div class="color-sample accent-primary" title="Primary Accent"></div>
+                    <div class="color-sample accent-secondary" title="Secondary Accent"></div>
+                    <div class="color-sample success" title="Success Color"></div>
+                    <div class="color-sample error" title="Error Color"></div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

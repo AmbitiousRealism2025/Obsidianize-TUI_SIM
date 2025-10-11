@@ -1,0 +1,434 @@
+/* Obsidianize TUI - Signature Theme Animations
+ * This file contains the unique animations for each theme
+ * that enhance their individual personalities
+ */
+
+/* ========== GLOBAL ANIMATION CONTROLS ========== */
+/* For users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}
+
+/* Animation toggle class */
+.animations-disabled * {
+  animation: none !important;
+  transition-duration: 0s !important;
+  transform: none !important;
+}
+
+/* ========== 1. PURPLE BASELINE - "MYSTIC PULSE" ========== */
+/* Mystic aura around the terminal container */
+html[data-theme="purple-baseline"] .terminal-container {
+  position: relative;
+}
+
+html[data-theme="purple-baseline"] .terminal-container::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(45deg, rgba(192, 132, 252, 0.15), rgba(155, 89, 208, 0.1));
+  border-radius: 12px;
+  z-index: -1;
+  animation: mystic-aura 6s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.1);
+}
+
+/* Mystic Pulse - Border Shimmer */
+html[data-theme="purple-baseline"] .border {
+  animation: mystic-shimmer 4s ease-in-out infinite;
+}
+
+/* Mystic Pulse - ASCII Mystique */
+html[data-theme="purple-baseline"] .ascii-art {
+  animation: mystic-luminosity 5s ease-in-out infinite;
+}
+
+/* Mystic Pulse - Cursor Enchantment */
+html[data-theme="purple-baseline"] .cursor {
+  text-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
+  animation: cursor-blink 1s infinite, mystic-cursor-aura 3s ease-in-out infinite;
+}
+
+/* Mystic Pulse Keyframes */
+@keyframes mystic-aura {
+  0%, 100% { 
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes mystic-shimmer {
+  0%, 100% { 
+    text-shadow: 0 0 2px rgba(192, 132, 252, 0.3);
+    opacity: 1;
+  }
+  50% { 
+    text-shadow: 0 0 4px rgba(192, 132, 252, 0.6), 0 0 8px rgba(155, 89, 208, 0.4);
+    opacity: 0.9;
+  }
+}
+
+@keyframes mystic-luminosity {
+  0%, 100% { 
+    filter: brightness(1) drop-shadow(0 0 2px rgba(155, 89, 208, 0.3));
+  }
+  50% { 
+    filter: brightness(1.05) drop-shadow(0 0 6px rgba(155, 89, 208, 0.5));
+  }
+}
+
+@keyframes mystic-cursor-aura {
+  0%, 100% { 
+    text-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
+  }
+  50% { 
+    text-shadow: 0 0 12px rgba(192, 132, 252, 0.8), 0 0 20px rgba(155, 89, 208, 0.4);
+  }
+}
+
+/* ========== 2. CLASSIC GREEN - "CRT AUTHENTICITY" ========== */
+/* CRT screen effect */
+html[data-theme="classic-green"] .terminal-container {
+  position: relative;
+  /* Enhanced scanline effect */
+  background-image: linear-gradient(
+    transparent 50%, 
+    rgba(0, 255, 0, 0.03) 50%,
+    rgba(0, 255, 0, 0.02) 52%
+  );
+  background-size: 100% 4px;
+  background-position: 0 0;
+  animation: crt-screen-flicker 3s infinite linear, crt-subtle-shift 12s infinite ease-in-out;
+}
+
+/* Phosphor persistence on text */
+html[data-theme="classic-green"] .terminal-main,
+html[data-theme="classic-green"] .tagline {
+  animation: phosphor-persistence 6s infinite ease;
+  will-change: filter;
+}
+
+/* Cursor beam effect */
+html[data-theme="classic-green"] .cursor {
+  animation: cursor-blink-green 1s infinite, electron-beam-flicker 0.5s infinite steps(3);
+  position: relative;
+}
+
+/* CRT Effect Keyframes */
+@keyframes crt-screen-flicker {
+  0% { opacity: 1; }
+  97% { opacity: 1; }
+  98% { opacity: 0.9; }
+  99% { opacity: 1; }
+  99.5% { opacity: 0.95; }
+  100% { opacity: 1; }
+}
+
+@keyframes crt-subtle-shift {
+  0%, 100% { background-position: 0 0; }
+  25% { background-position: 0 1px; }
+  50% { background-position: 0 0; }
+  75% { background-position: 0 -1px; }
+}
+
+@keyframes phosphor-persistence {
+  0%, 100% { 
+    text-shadow: 0 0 2px rgba(0, 255, 0, 0.4);
+    filter: brightness(1);
+  }
+  50% { 
+    text-shadow: 0 0 3px rgba(0, 255, 0, 0.6);
+    filter: brightness(1.03);
+  }
+}
+
+@keyframes electron-beam-flicker {
+  0%, 100% { box-shadow: 0 0 2px rgba(0, 255, 0, 0.6); }
+  50% { box-shadow: 0 0 4px rgba(0, 255, 0, 0.8); }
+}
+
+/* ========== 3. MODERN DARK - "DIGITAL FLOW" ========== */
+/* Digital Flow - Subtle container styling */
+html[data-theme="modern-dark"] .terminal-container {
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* Digital Flow - Background gradient drift */
+html[data-theme="modern-dark"] .terminal-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: radial-gradient(
+    circle at 30% 50%, 
+    rgba(137, 180, 250, 0.08) 0%,
+    rgba(116, 199, 236, 0.04) 30%,
+    rgba(180, 190, 254, 0.02) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: -1;
+  animation: digital-flow-drift 18s infinite ease-in-out alternate;
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* Digital Flow - Progress bar wave */
+html[data-theme="modern-dark"] .progress-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-theme="modern-dark"] .progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0) 0%,
+    rgba(137, 180, 250, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: digital-wave 3s infinite ease-out;
+  will-change: transform;
+}
+
+/* Smooth focus transitions */
+html[data-theme="modern-dark"] button:focus,
+html[data-theme="modern-dark"] a:focus,
+html[data-theme="modern-dark"] input:focus {
+  transition: all 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Digital Flow Keyframes */
+@keyframes digital-flow-drift {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(2deg); }
+  100% { transform: scale(1) rotate(-1deg); }
+}
+
+@keyframes digital-wave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(300%); }
+}
+
+/* ========== 4. HIGH CONTRAST - "CRYSTAL CLARITY" ========== */
+/* Crystal Clarity - Focus bloom effect */
+html[data-theme="high-contrast"] button:focus,
+html[data-theme="high-contrast"] a:focus,
+html[data-theme="high-contrast"] input:focus,
+html[data-theme="high-contrast"] [tabindex]:focus {
+  animation: focus-bloom 0.6s ease-out;
+  will-change: outline-offset, outline-width;
+}
+
+/* Crystal Clarity - Contrast pulse */
+html[data-theme="high-contrast"] .border {
+  animation: contrast-pulse 10s infinite ease-in-out;
+  will-change: opacity;
+}
+
+/* Crystal Clarity - Clean transitions for interactions */
+html[data-theme="high-contrast"] .interactive-element,
+html[data-theme="high-contrast"] .status-item,
+html[data-theme="high-contrast"] .color-sample {
+  transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1), 
+              outline-offset 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Crystal Clarity - Subtle ASCII art enhancement */
+html[data-theme="high-contrast"] .ascii-art {
+  animation: crystal-clarity 8s infinite ease-in-out;
+}
+
+/* Crystal Clarity - Status indicator pulse */
+html[data-theme="high-contrast"] .status-icon {
+  animation: crystal-status-pulse 4s infinite ease-in-out;
+}
+
+/* Crystal Clarity Keyframes */
+@keyframes focus-bloom {
+  0% { outline-offset: 0px; outline-width: 2px; }
+  70% { outline-offset: 4px; outline-width: 3px; }
+  100% { outline-offset: 2px; outline-width: 3px; }
+}
+
+@keyframes contrast-pulse {
+  0%, 100% { 
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% { 
+    opacity: 0.9;
+    filter: brightness(1.05);
+  }
+}
+
+@keyframes crystal-clarity {
+  0%, 100% { 
+    filter: contrast(1) brightness(1);
+  }
+  50% { 
+    filter: contrast(1.02) brightness(1.01);
+  }
+}
+
+@keyframes crystal-status-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* ========== 5. WARM AMBER - "LIVING HEARTH" ========== */
+/* Living Hearth - Breathing effect (already implemented) */
+html[data-theme="warm-amber"] .terminal-container {
+  animation: breathing 8s infinite ease-in-out;
+}
+
+/* Living Hearth - Ember sparkles on ASCII art */
+html[data-theme="warm-amber"] .ascii-art {
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-theme="warm-amber"] .ascii-art::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(255, 140, 0, 0.6) 0%, rgba(255, 140, 0, 0) 5%),
+    radial-gradient(circle at 80% 40%, rgba(255, 176, 0, 0.5) 0%, rgba(255, 176, 0, 0) 6%),
+    radial-gradient(circle at 40% 70%, rgba(255, 215, 0, 0.4) 0%, rgba(255, 215, 0, 0) 7%),
+    radial-gradient(circle at 60% 85%, rgba(255, 160, 0, 0.5) 0%, rgba(255, 160, 0, 0) 5%);
+  background-size: 200% 200%;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  animation: ember-sparkles 15s infinite ease-in-out;
+  opacity: 0.3;
+}
+
+/* Living Hearth - Warmth ripples */
+html[data-theme="warm-amber"] .terminal-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 176, 0, 0.05) 0%,
+    rgba(255, 140, 0, 0.02) 40%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  z-index: -1;
+  animation: warmth-ripple 10s infinite ease-in-out alternate;
+  pointer-events: none;
+}
+
+/* Living Hearth Keyframes */
+@keyframes ember-sparkles {
+  0% { transform: translate(0%, 0%) rotate(0deg); opacity: 0.3; }
+  25% { transform: translate(-5%, -3%) rotate(1deg); opacity: 0.2; }
+  50% { transform: translate(2%, 5%) rotate(0deg); opacity: 0.4; }
+  75% { transform: translate(3%, -2%) rotate(-1deg); opacity: 0.3; }
+  100% { transform: translate(0%, 0%) rotate(0deg); opacity: 0.3; }
+}
+
+@keyframes warmth-ripple {
+  0% { 
+    transform: scale(1); 
+    opacity: 0.5; 
+  }
+  50% { 
+    transform: scale(1.1); 
+    opacity: 0.7;
+  }
+  100% { 
+    transform: scale(0.95); 
+    opacity: 0.4; 
+  }
+}
+
+/* Redefining breathing keyframe here for completeness */
+@keyframes breathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
+
+/* ========== MISSING BASE KEYFRAMES ========== */
+/* Standard cursor blink animation */
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Green terminal cursor blink */
+@keyframes cursor-blink-green {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Animation Control Button Styles */
+.animation-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 8px 12px;
+  border: 2px solid var(--theme-border);
+  background-color: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.animation-toggle:hover {
+  background-color: var(--theme-bg-tertiary);
+  transform: translateY(-2px);
+}
+
+.animation-toggle:focus {
+  outline: 2px solid var(--theme-accent-primary);
+  outline-offset: 2px;
+}
+
+.animation-toggle__icon {
+  font-size: 16px;
+}
+
+.animation-toggle__text {
+  font-weight: 500;
+}

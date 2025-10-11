@@ -1,0 +1,190 @@
+/* Theme 5: Warm Terminal - "Golden Hour" */
+
+:root[data-theme="warm-amber"] {
+  /* Background colors */
+  --theme-bg-primary: #1a1611;
+  --theme-bg-secondary: #221e17;
+  --theme-bg-tertiary: #2a251c;
+  
+  /* Text colors */
+  --theme-text-primary: #ffd4a3;
+  --theme-text-secondary: #d4af8c;
+  --theme-text-muted: #b8956f;
+  
+  /* Accent colors */
+  --theme-accent-primary: #ffb000;
+  --theme-accent-secondary: #ff8c00;
+  --theme-accent-tertiary: #ffcc73;
+  
+  /* Semantic colors */
+  --theme-border: #ffb000;
+  --theme-ascii-art: #ff8c00;
+  --theme-tagline: #ffcc73;
+  --theme-prompt: #ffb000;
+  --theme-cursor: #ffb000;
+  
+  /* Status colors - warm variants */
+  --theme-success: #98d982;
+  --theme-warning: #f4a261;
+  --theme-error: #e76f51;
+  --theme-info: #2a9d8f;
+  
+  /* Warm palette extensions */
+  --theme-warm-gold: #ffd700;
+  --theme-warm-copper: #b87333;
+  --theme-warm-cream: #fff8dc;
+  --theme-warm-sienna: #a0522d;
+  
+  /* Interactive states */
+  --theme-hover: #ffc929;
+  --theme-active: #e6a000;
+  --theme-focus: #ffb000;
+  --theme-selection: rgba(255, 176, 0, 0.3);
+}
+
+/* Theme-specific enhancements */
+html[data-theme="warm-amber"] body {
+  font-family: 'JetBrains Mono', 'Operator Mono', 'Dank Mono', 'Fira Code', 'Source Code Pro', monospace;
+  
+  /* Warm, comfortable text rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[data-theme="warm-amber"] .ascii-art {
+  font-weight: 600; /* Semi-bold for warmth without harshness */
+  text-shadow: 0 0 4px rgba(255, 140, 0, 0.3); /* Warm glow effect */
+}
+
+html[data-theme="warm-amber"] .border {
+  text-shadow: 0 0 2px rgba(255, 176, 0, 0.2); /* Subtle golden glow */
+}
+
+html[data-theme="warm-amber"] .tagline {
+  text-shadow: 0 0 6px rgba(255, 204, 115, 0.4); /* Soft golden glow */
+}
+
+/* Cozy glow effects */
+html[data-theme="warm-amber"] .terminal-container {
+  box-shadow: 
+    inset 0 0 20px rgba(255, 176, 0, 0.05),
+    0 0 40px rgba(255, 140, 0, 0.1);
+  border-radius: 12px;
+  position: relative;
+}
+
+/* Progress bars with warm gradient */
+html[data-theme="warm-amber"] .progress-fill {
+  background: linear-gradient(90deg, 
+    var(--theme-accent-secondary), 
+    var(--theme-accent-primary),
+    var(--theme-warm-gold)
+  );
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(255, 176, 0, 0.3);
+}
+
+/* Warm hover effects */
+html[data-theme="warm-amber"] .color-sample:hover {
+  color: var(--theme-hover);
+  text-shadow: 0 0 8px rgba(255, 201, 41, 0.6);
+  transition: all 0.3s ease;
+  transform: scale(1.1);
+}
+
+/* Candlelight flicker effect (optional) */
+html[data-theme="warm-amber"] .ascii-art {
+  animation: candlelight-flicker 4s infinite ease-in-out;
+}
+
+@keyframes candlelight-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+  75% { opacity: 0.98; }
+}
+
+/* Blue light reduction filter */
+html[data-theme="warm-amber"].evening-mode {
+  filter: sepia(0.1) saturate(1.2) hue-rotate(15deg);
+}
+
+/* Breathing animation for relaxation */
+html[data-theme="warm-amber"] .terminal-container {
+  animation: breathing 8s infinite ease-in-out;
+}
+
+@keyframes breathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
+
+/* Warm notification pulses */
+html[data-theme="warm-amber"] .status-icon {
+  animation: warm-pulse 2s infinite;
+}
+
+@keyframes warm-pulse {
+  0% { text-shadow: 0 0 0 0 rgba(255, 176, 0, 0.4); }
+  70% { text-shadow: 0 0 0 8px rgba(255, 176, 0, 0); }
+  100% { text-shadow: 0 0 0 0 rgba(255, 176, 0, 0); }
+}
+
+/* Comfortable reading adjustments */
+html[data-theme="warm-amber"] body {
+  line-height: 1.6; /* Comfortable spacing for relaxed reading */
+}
+
+html[data-theme="warm-amber"] .theme-description {
+  line-height: 1.8; /* Extra comfortable for longer text */
+}
+
+/* Evening mode class for additional warmth */
+html[data-theme="warm-amber"].time-evening {
+  --theme-text-primary: #ffd4a3;
+  --theme-accent-primary: #ffb000;
+  filter: sepia(0.15) saturate(1.1);
+}
+
+html[data-theme="warm-amber"].time-night {
+  --theme-bg-primary: #151210;
+  --theme-text-primary: #e6c18a;
+  --theme-accent-primary: #cc8800;
+}
+
+/* Seasonal variations */
+html[data-theme="warm-amber"].season-autumn {
+  --theme-accent-secondary: #cc5500;
+  --theme-warm-copper: #cd7f32;
+}
+
+html[data-theme="warm-amber"].season-winter {
+  --theme-bg-primary: #1a1510;
+  --theme-accent-primary: #ff9500;
+}
+
+/* Warm theme personality enhancements */
+html[data-theme="warm-amber"] .terminal-container::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  background: radial-gradient(circle at center, rgba(255, 140, 0, 0.08) 0%, transparent 70%);
+  border-radius: 20px;
+  z-index: -1;
+}
+
+/* Enhanced warmth for interactive elements */
+html[data-theme="warm-amber"] .cursor {
+  background-color: var(--theme-cursor);
+  color: var(--theme-bg-primary);
+  font-weight: 700;
+  animation: cursor-blink-warm 1.2s infinite ease-in-out;
+}
+
+@keyframes cursor-blink-warm {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.7; }
+}

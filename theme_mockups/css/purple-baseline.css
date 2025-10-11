@@ -1,0 +1,77 @@
+/* Theme 1: Purple Baseline - "Mystic Terminal" */
+
+:root[data-theme="purple-baseline"] {
+  /* Background colors */
+  --theme-bg-primary: #0f0f23;
+  --theme-bg-secondary: #1a1a3a;
+  --theme-bg-tertiary: #262640;
+  
+  /* Text colors */
+  --theme-text-primary: #e2e8f0;
+  --theme-text-secondary: #94a3b8;
+  --theme-text-muted: #64748b;
+  
+  /* Accent colors */
+  --theme-accent-primary: #c084fc;
+  --theme-accent-secondary: #9b59d0;
+  --theme-accent-tertiary: #d8b4fe;
+  
+  /* Semantic colors */
+  --theme-border: #c084fc;
+  --theme-ascii-art: #9b59d0;
+  --theme-tagline: #d8b4fe;
+  --theme-prompt: #c084fc;
+  --theme-cursor: #c084fc;
+  
+  /* Status colors */
+  --theme-success: #22c55e;
+  --theme-warning: #f59e0b;
+  --theme-error: #ef4444;
+  --theme-info: #3b82f6;
+  
+  /* Interactive states */
+  --theme-hover: #e879f9;
+  --theme-active: #a855f7;
+  --theme-focus: #c084fc;
+  --theme-selection: rgba(192, 132, 252, 0.3);
+}
+
+/* Theme-specific enhancements */
+html[data-theme="purple-baseline"] body {
+  background-color: var(--theme-bg-primary);
+}
+
+html[data-theme="purple-baseline"] .ascii-art {
+  font-weight: 600;
+}
+
+html[data-theme="purple-baseline"] .border {
+  font-weight: 500;
+}
+
+html[data-theme="purple-baseline"] .tagline {
+  font-weight: 400;
+}
+
+/* Purple theme specific progress bar */
+html[data-theme="purple-baseline"] .progress-fill {
+  background: linear-gradient(90deg, var(--theme-accent-secondary), var(--theme-accent-primary));
+}
+
+/* Theme personality styling */
+html[data-theme="purple-baseline"] .terminal-container {
+  /* Subtle depth effect */
+  position: relative;
+}
+
+html[data-theme="purple-baseline"] .terminal-container::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(45deg, rgba(192, 132, 252, 0.05), rgba(155, 89, 208, 0.05));
+  border-radius: 12px;
+  z-index: -1;
+}
