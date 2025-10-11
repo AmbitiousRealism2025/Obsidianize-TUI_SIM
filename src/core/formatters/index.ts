@@ -68,13 +68,8 @@ export class FrontmatterFormatter {
     this.options = {
       sortKeys: true,
       yamlOptions: {
-        lineWidth: 0,
-        minContentWidth: 0,
-        noRefs: true,
-        sortKeys: options.sortKeys ?? true,
-        strict: true,
         version: '1.2'
-      },
+      } as YAML.DocumentOptions,
       ...options
     };
   }
@@ -203,7 +198,7 @@ export class MarkdownFormatter implements IFormatter {
       field in gem.frontmatter && gem.frontmatter[field as keyof typeof gem.frontmatter] !== undefined
     );
 
-    const hasContent = gem.content.summary && gem.content.keyPoints.length > 0;
+    const hasContent = Boolean(gem.content.summary && gem.content.keyPoints.length > 0);
 
     return hasRequiredFields && hasContent;
   }
@@ -461,13 +456,8 @@ export class YAMLFormatter implements IFormatter {
   constructor(options: Partial<typeof YAMLFormatter.prototype.options> = {}) {
     this.options = {
       yamlOptions: {
-        lineWidth: 0,
-        minContentWidth: 0,
-        noRefs: true,
-        sortKeys: true,
-        strict: true,
         version: '1.2'
-      },
+      } as YAML.DocumentOptions,
       includeMetadata: true,
       ...options
     };

@@ -9,7 +9,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { PDFParse } from 'pdf-parse';
+const pdfParse = require('pdf-parse');
 import type {
   GeminiGem,
   ProcessingRequest,
@@ -219,7 +219,7 @@ class ContentFetcher {
     if (contentType.includes('application/pdf')) {
       // Handle PDF content
       const buffer = Buffer.from(response.data);
-      const pdfData = await PDFParse(buffer);
+      const pdfData = await pdfParse(buffer);
       content = pdfData.text;
       metadata = {
         ...metadata,

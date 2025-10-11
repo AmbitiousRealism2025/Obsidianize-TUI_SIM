@@ -7,15 +7,18 @@
  */
 
 import { z } from 'zod';
+
+import { 
+  ContentType,
+  ProcessingStatus,
+  AnalysisMode,
+  ErrorCategory,
+  OutputFormat,
+  EntityType,
+  SafetyThreshold
+} from '../types/index.js';
 import type {
   GeminiGem,
-  type ContentType,
-  type ProcessingStatus,
-  type AnalysisMode,
-  type ErrorCategory,
-  type OutputFormat,
-  type EntityType,
-  type SafetyThreshold,
   ProcessingRequest,
   ProcessingOptions,
   AuthConfig,
@@ -28,15 +31,14 @@ import type {
   GeminiRequestConfig,
   GeminiResponse
 } from '../types/index.js';
-import {
-  ContentType as ContentTypeEnum,
-  ProcessingStatus as ProcessingStatusEnum,
-  AnalysisMode as AnalysisModeEnum,
-  ErrorCategory as ErrorCategoryEnum,
-  OutputFormat as OutputFormatEnum,
-  EntityType as EntityTypeEnum,
-  SafetyThreshold as SafetyThresholdEnum
-} from '../types/index.js';
+// Using the enums imported above
+const ContentTypeEnum = ContentType;
+const ProcessingStatusEnum = ProcessingStatus;
+const AnalysisModeEnum = AnalysisMode;
+const ErrorCategoryEnum = ErrorCategory;
+const OutputFormatEnum = OutputFormat;
+const EntityTypeEnum = EntityType;
+const SafetyThresholdEnum = SafetyThreshold;
 
 // ============================================================================
 // BASE SCHEMAS
@@ -68,39 +70,25 @@ const processingTimeSchema = z.number().min(0);
 // ============================================================================
 
 /** Content type enum schema */
-const contentTypeSchema = z.nativeEnum(ContentTypeEnum, {
-  errorMap: () => ({ message: 'Invalid content type' })
-});
+const contentTypeSchema = z.nativeEnum(ContentTypeEnum);
 
 /** Processing status enum schema */
-const processingStatusSchema = z.nativeEnum(ProcessingStatusEnum, {
-  errorMap: () => ({ message: 'Invalid processing status' })
-});
+const processingStatusSchema = z.nativeEnum(ProcessingStatusEnum);
 
 /** Analysis mode enum schema */
-const analysisModeSchema = z.nativeEnum(AnalysisModeEnum, {
-  errorMap: () => ({ message: 'Invalid analysis mode' })
-});
+const analysisModeSchema = z.nativeEnum(AnalysisModeEnum);
 
 /** Error category enum schema */
-const errorCategorySchema = z.nativeEnum(ErrorCategoryEnum, {
-  errorMap: () => ({ message: 'Invalid error category' })
-});
+const errorCategorySchema = z.nativeEnum(ErrorCategoryEnum);
 
 /** Output format enum schema */
-const outputFormatSchema = z.nativeEnum(OutputFormatEnum, {
-  errorMap: () => ({ message: 'Invalid output format' })
-});
+const outputFormatSchema = z.nativeEnum(OutputFormatEnum);
 
 /** Entity type enum schema */
-const entityTypeSchema = z.nativeEnum(EntityTypeEnum, {
-  errorMap: () => ({ message: 'Invalid entity type' })
-});
+const entityTypeSchema = z.nativeEnum(EntityTypeEnum);
 
 /** Safety threshold enum schema */
-const safetyThresholdSchema = z.nativeEnum(SafetyThresholdEnum, {
-  errorMap: () => ({ message: 'Invalid safety threshold' })
-});
+const safetyThresholdSchema = z.nativeEnum(SafetyThresholdEnum);
 
 // ============================================================================
 // ENTITY AND CONTENT SCHEMAS
@@ -128,7 +116,7 @@ const relatedResourceSchema = z.object({
 });
 
 /** Content section schema */
-const contentSectionSchema = z.object({
+const contentSectionSchema: z.ZodType<any> = z.object({
   id: idSchema,
   heading: nonEmptyString.max(200, 'Section heading too long'),
   content: z.string().min(10, 'Section content too short').max(10000, 'Section content too long'),
@@ -162,7 +150,7 @@ const geminiGemFrontmatterSchema = z.object({
   insights: z.array(
     z.string().min(10, 'Insight too short').max(500, 'Insight too long')
   ).max(20, 'Too many insights'),
-  metadata: z.record(z.unknown()),
+  metadata: z.record(z.string(), z.unknown()),
   confidence: confidenceSchema.optional(),
   processingTime: processingTimeSchema.optional()
 });
@@ -181,7 +169,7 @@ export const geminiGemSchema = z.object({
 const contentInputSchema = z.object({
   text: z.string().max(1000000, 'Text content too large').optional(),
   filePath: z.string().max(500, 'File path too long').optional(),
-  buffer: z.instanceof(Buffer).max(10 * 1024 * 1024, 'Buffer too large (max 10MB)').optional(),
+  buffer: z.instanceof(Buffer).refine((buffer) => buffer.length <= 10 * 1024 * 1024, { message: 'Buffer too large (max 10MB)' }).optional(),
   type: contentTypeSchema.optional()
 }).refine(
   (data) => Object.keys(data).filter(key => data[key as keyof typeof data] !== undefined).length === 1,
@@ -241,7 +229,7 @@ const processingStageSchema = z.object({
   startTime: dateSchema,
   endTime: dateSchema.optional(),
   duration: processingTimeSchema.optional(),
-  data: z.record(z.unknown()).optional(),
+  data: z.record(z.string(), z.unknown()).optional(),
   errors: z.array(z.any()).optional()
 });
 
@@ -264,7 +252,7 @@ const processingErrorSchema = z.object({
   category: errorCategorySchema,
   code: nonEmptyString.max(50, 'Error code too long'),
   message: nonEmptyString.max(500, 'Error message too long'),
-  details: z.record(z.unknown()).optional(),
+  details: z.record(z.string(), z.unknown()).optional(),
   suggestion: z.string().max(200, 'Suggestion too long').optional(),
   recoverable: z.boolean(),
   timestamp: dateSchema,
@@ -454,8 +442,8 @@ export class BaseValidator<T> {
             field: zodError.path.join('.'),
             code: zodError.code,
             message: zodError.message,
-            value: zodError.received,
-            expected: zodError.expected?.toString()
+            value: (zodError as any).received || data,
+            expected: (zodError as any).expected?.toString() || 'Valid value'
           });
         });
       } else {

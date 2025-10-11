@@ -120,7 +120,7 @@ class AtomicFileOperations {
     }
 
     try {
-      const compressed = Bun.gzipSync(data);
+      const compressed = Bun.gzipSync(data as any) as Uint8Array;
       // Only use compression if it reduces size by at least 10%
       if (compressed.length < data.length * 0.9) {
         return compressed;
@@ -137,7 +137,7 @@ class AtomicFileOperations {
    */
   private async decompressData(data: Uint8Array): Promise<Uint8Array> {
     try {
-      return Bun.gunzipSync(data);
+      return Bun.gunzipSync(data as any) as Uint8Array;
     } catch (error) {
       // Data might not be compressed
       return data;
@@ -270,7 +270,8 @@ class AtomicFileOperations {
 
       // Decompress if needed
       if (compression) {
-        data = await this.decompressData(data);
+        const decompressed = await this.decompressData(data);
+        data = Buffer.from(decompressed);
       }
 
       performanceMonitor.recordRequest(performance.now() - startTime);

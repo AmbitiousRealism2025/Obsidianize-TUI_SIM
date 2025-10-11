@@ -132,7 +132,7 @@ class HighPerformanceCache {
     }
 
     try {
-      const compressed = Bun.gzipSync(data);
+      const compressed = Bun.gzipSync(data as any) as Uint8Array;
       // Only use compression if it actually reduces size
       if (compressed.length < data.length) {
         return { data: new Uint8Array(compressed), compressed: true };
@@ -153,7 +153,8 @@ class HighPerformanceCache {
     }
 
     try {
-      return new Uint8Array(Bun.gunzipSync(data));
+      const decompressed = Bun.gunzipSync(data as any);
+      return new Uint8Array(decompressed as any);
     } catch (error) {
       console.warn('Decompression failed:', error);
       return data;

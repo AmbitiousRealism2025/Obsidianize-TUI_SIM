@@ -128,7 +128,7 @@ export {
 // MAIN API FUNCTIONS
 // ============================================================================
 
-import { DataProcessor, DEFAULT_CONFIG } from './processor.js';
+import { DataProcessor, DEFAULT_CONFIG, type ProcessorConfig } from './processor.js';
 import type {
   ProcessingRequest,
   ProcessingResult,
@@ -137,7 +137,6 @@ import type {
   ContentType,
   AnalysisMode,
   ValidationResult,
-  ProcessorConfig,
   OutputFormat
 } from './types/index.js';
 import {
