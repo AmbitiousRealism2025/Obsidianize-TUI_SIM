@@ -731,6 +731,87 @@ Before Release:
 
 ---
 
+## Acceptance Criteria
+
+Concrete, testable acceptance criteria for Phase 4 CLI implementation.
+
+### AC-1: CLI Installation & Setup
+
+- [ ] `bun install -g obsidianize` successfully installs the CLI
+- [ ] `obsidianize --version` outputs semantic version (e.g., `1.0.0`)
+- [ ] `obsidianize --help` displays all available commands with descriptions
+- [ ] First run without config prompts for API key setup
+- [ ] `obsidianize setup` launches interactive wizard
+
+### AC-2: Single URL Processing
+
+- [ ] `obsidianize process <youtube-url>` returns markdown within 30s
+- [ ] `obsidianize process <article-url>` extracts content correctly
+- [ ] Output file follows naming convention: `YYYY-MM-DD_Title.md`
+- [ ] `--output` flag saves to specified directory
+- [ ] `--format json` produces valid JSON output
+- [ ] `--format yaml` produces valid YAML output
+- [ ] `--stdout` prints result to terminal instead of file
+- [ ] Exit code 0 on success, non-zero on failure
+- [ ] All `--summary` levels work: brief, standard, detailed, comprehensive
+
+### AC-3: Batch Processing
+
+- [ ] `obsidianize batch urls.txt` processes all URLs from text file
+- [ ] `obsidianize batch urls.json` processes URLs with per-item options
+- [ ] `--concurrent N` controls parallel workers (1-10)
+- [ ] Progress indicator shows completion percentage
+- [ ] Failed URLs logged but don't stop batch (unless `--stop-on-error`)
+- [ ] Summary report at end shows success/fail counts
+- [ ] `--dry-run` validates URLs without processing
+- [ ] `--resume <batch-id>` continues from checkpoint
+
+### AC-4: Configuration Management
+
+- [ ] `obsidianize config set gemini.api-key <key>` stores encrypted key
+- [ ] `obsidianize config get gemini.api-key` shows masked key (e.g., `AIza...xxxx`)
+- [ ] `obsidianize config list` displays all configuration values
+- [ ] `obsidianize config validate` verifies configuration integrity
+- [ ] `obsidianize config reset` restores default values
+- [ ] `obsidianize config path` shows config file location
+- [ ] Config file location: `~/.obsidianize/config.json`
+- [ ] File permissions set to 600 (owner read/write only)
+- [ ] Environment variable `OBSIDIANIZE_API_KEY` overrides config file
+
+### AC-5: Job Status & Monitoring
+
+- [ ] `obsidianize status <batch-id>` shows job progress
+- [ ] `--watch` flag updates status in real-time
+- [ ] Status includes: completed count, failed count, pending count
+- [ ] `--export job.json` saves job data to file
+
+### AC-6: Performance Requirements
+
+- [ ] Cold start time < 100ms (measured via `time obsidianize --help`)
+- [ ] Memory usage < 50MB baseline (measured via `ps aux`)
+- [ ] Single URL processing < 30s (excluding network latency)
+- [ ] Binary size < 50MB
+
+### AC-7: Error Handling
+
+- [ ] Invalid URL shows helpful error message with example format
+- [ ] Network timeout shows retry suggestion
+- [ ] Invalid API key shows setup instructions
+- [ ] Rate limit exceeded shows wait time
+- [ ] All errors include error codes for scripting (exit codes 1-8)
+- [ ] `--verbose` flag provides detailed error context
+- [ ] Errors written to stderr, success output to stdout
+
+### AC-8: Cross-Platform Compatibility
+
+- [ ] Works on macOS (arm64 and x64)
+- [ ] Works on Linux (x64 and arm64)
+- [ ] Works on Windows (x64)
+- [ ] Binary artifacts build for all platforms
+- [ ] npm package installs correctly on all platforms
+
+---
+
 ## Future Enhancements (Post Phase 4)
 
 ### Phase 4.1 (Polish)

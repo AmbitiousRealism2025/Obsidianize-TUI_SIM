@@ -33,7 +33,8 @@ test("GET / HTML", async () => {
   expect(body).toContain("<!DOCTYPE html>");
   expect(body).toContain("OBSIDIANIZE");
   expect(body).toContain("Your Knowledge, Crystallized");
-  expect(body).toContain("background-color: #0f0f23");
+  // Verify external CSS is linked (styles moved from inline to landing.css)
+  expect(body).toContain('<link rel="stylesheet" href="/styles/landing.css">');
 });
 
 test("Performance: Response time under 100ms", async () => {
