@@ -7,7 +7,6 @@
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import axios from 'axios';
 import { createLogger } from './logging/index.js';
 
 const logger = createLogger('processor');
@@ -203,66 +202,82 @@ class ContentFetcher {
 
   /** Fetch web content (articles, papers) */
   private async fetchWebContent(url: string): Promise<{ content: string; metadata: Record<string, unknown> }> {
-    const response = await axios.get(url, {
-      timeout: this.config.timeouts.fetchContent,
-      headers: {
-        'User-Agent': 'Obsidianize/1.0 (Content Processor)'
+    // Use native fetch with AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.config.timeouts.fetchContent);
+
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Obsidianize/1.0 (Content Processor)'
+        }
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-    });
 
-    const contentType = response.headers['content-type'] || '';
-    let content: string;
-    let metadata: Record<string, unknown> = {
-      url,
-      contentType,
-      status: response.status,
-      headers: response.headers
-    };
-
-    if (contentType.includes('application/pdf')) {
-      // Handle PDF content using pdf-parse v2 API
-      const buffer = Buffer.from(response.data);
-      const pdfParser = new PDFParse({ data: new Uint8Array(buffer) });
-      const textResult = await pdfParser.getText();
-      const infoResult = await pdfParser.getInfo();
-      content = textResult.text;
-      metadata = {
-        ...metadata,
-        pages: infoResult.total,
-        info: infoResult.info,
-        metadata: infoResult.metadata
+      const contentType = response.headers.get('content-type') || '';
+      let content: string;
+      let metadata: Record<string, unknown> = {
+        url,
+        contentType,
+        status: response.status,
+        headers: Object.fromEntries(response.headers.entries())
       };
-      await pdfParser.destroy();
-    } else {
-      // Handle HTML content
-      const $ = cheerio.load(response.data);
 
-      // Remove unwanted elements
-      $('script, style, nav, header, footer, aside, .ads, .advertisement').remove();
+      if (contentType.includes('application/pdf')) {
+        // Handle PDF content using pdf-parse v2 API
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const pdfParser = new PDFParse({ data: new Uint8Array(buffer) });
+        const textResult = await pdfParser.getText();
+        const infoResult = await pdfParser.getInfo();
+        content = textResult.text;
+        metadata = {
+          ...metadata,
+          pages: infoResult.total,
+          info: infoResult.info,
+          metadata: infoResult.metadata
+        };
+        await pdfParser.destroy();
+      } else {
+        // Handle HTML content
+        const htmlText = await response.text();
+        const $ = cheerio.load(htmlText);
 
-      // Extract main content
-      const mainContent = $('main, article, .content, .post-body, .entry-content')
-        .first()
-        .text()
-        .trim();
+        // Remove unwanted elements
+        $('script, style, nav, header, footer, aside, .ads, .advertisement').remove();
 
-      const title = $('title').first().text().trim() ||
-                   $('h1').first().text().trim();
+        // Extract main content
+        const mainContent = $('main, article, .content, .post-body, .entry-content')
+          .first()
+          .text()
+          .trim();
 
-      content = mainContent || $('body').text().trim();
-      metadata = {
-        ...metadata,
-        title,
-        wordCount: content.split(/\s+/).length,
-        extractedMain: !!mainContent
-      };
+        const title = $('title').first().text().trim() ||
+                     $('h1').first().text().trim();
+
+        content = mainContent || $('body').text().trim();
+        metadata = {
+          ...metadata,
+          title,
+          wordCount: content.split(/\s+/).length,
+          extractedMain: !!mainContent
+        };
+      }
+
+      if (!content || content.length < 100) {
+        throw new Error('Extracted content is too short or empty');
+      }
+
+      return { content, metadata };
+    } finally {
+      clearTimeout(timeoutId);
     }
-
-    if (!content || content.length < 100) {
-      throw new Error('Extracted content is too short or empty');
-    }
-
-    return { content, metadata };
   }
 }
 

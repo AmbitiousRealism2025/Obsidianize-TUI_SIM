@@ -93,7 +93,6 @@ src/
 ```json
 {
   "@google/generative-ai": "^0.24.1",        // Gemini API client ✅
-  "axios": "^1.12.2",                         // HTTP client ✅
   "marked": "^16.4.0",                        // Markdown processing ✅
   "yaml": "^2.8.1",                           // YAML frontmatter ✅
   "zod": "^4.1.12",                           // Runtime validation ✅
@@ -107,6 +106,7 @@ src/
   "vitest": "^3.2.4"                          // Test runner ✅
 }
 ```
+**Note**: HTTP requests use Bun's native `fetch()` API (no axios dependency).
 
 ## Development Guidelines
 

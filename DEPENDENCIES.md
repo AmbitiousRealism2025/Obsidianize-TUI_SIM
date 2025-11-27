@@ -47,10 +47,11 @@
   - Natural language processing features
 
 ### Web & Data Fetching
-- **axios** (^1.12.2) - HTTP client
+- **Native fetch()** - Built-in HTTP client
+  - Uses Bun's native fetch API (no external dependency)
   - API communication and web requests
   - Fetches external content and resources
-  - Reliable request/response handling
+  - AbortController for timeout handling
 
 - **cheerio** (^1.1.2) - Server-side HTML parser
   - Parses HTML content for extraction

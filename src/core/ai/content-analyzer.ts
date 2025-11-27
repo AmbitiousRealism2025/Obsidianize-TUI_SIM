@@ -1,8 +1,23 @@
-import axios from 'axios';
 import * as cheerio from 'cheerio';
 // import pdfParse from 'pdf-parse';
 import { URL } from 'url';
 import { createLogger } from '../logging/index.js';
+
+/** Helper function for fetch with timeout */
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout: number = 15000): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 
 const logger = createLogger('content-analyzer');
 
@@ -179,14 +194,18 @@ export class ContentAnalyzer {
 
       // For YouTube, we would normally use YouTube Data API
       // For this implementation, we'll extract basic info from the page
-      const response = await axios.get(url, {
+      const response = await fetchWithTimeout(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        },
-        timeout: 15000
+        }
       });
 
-      const $ = cheerio.load(response.data);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const htmlText = await response.text();
+      const $ = cheerio.load(htmlText);
 
       // Extract metadata
       const title = $('title').text().replace(' - YouTube', '') || 'YouTube Video';
@@ -232,14 +251,18 @@ export class ContentAnalyzer {
 
   private static async extractArticleContent(url: string): Promise<ExtractedContent> {
     try {
-      const response = await axios.get(url, {
+      const response = await fetchWithTimeout(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        },
-        timeout: 15000
+        }
       });
 
-      const $ = cheerio.load(response.data);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const htmlText = await response.text();
+      const $ = cheerio.load(htmlText);
 
       // Extract metadata
       const title =
@@ -363,14 +386,18 @@ To enable full PDF analysis, install and configure pdf-parse library with proper
 
   private static async extractPodcastContent(url: string): Promise<ExtractedContent> {
     try {
-      const response = await axios.get(url, {
+      const response = await fetchWithTimeout(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        },
-        timeout: 15000
+        }
       });
 
-      const $ = cheerio.load(response.data);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const htmlText = await response.text();
+      const $ = cheerio.load(htmlText);
 
       // Extract podcast metadata
       const title =
