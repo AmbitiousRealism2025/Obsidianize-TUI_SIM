@@ -7,6 +7,7 @@
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { YoutubeTranscript } from 'youtube-transcript';
 import { createLogger } from './logging/index.js';
 
 const logger = createLogger('processor');
@@ -180,24 +181,132 @@ class ContentFetcher {
     }
   }
 
-  /** Fetch YouTube video information (simplified) */
+  /** Fetch YouTube video information with real transcript extraction */
   private async fetchYouTubeContent(url: string): Promise<{ content: string; metadata: Record<string, unknown> }> {
     const videoId = URLValidator.extractYouTubeId(url);
     if (!videoId) {
       throw new Error('Invalid YouTube URL');
     }
 
-    // In a real implementation, this would use YouTube API
-    // For now, return a placeholder
-    const metadata = {
+    logger.info('Fetching YouTube content', { videoId, url });
+
+    // Initialize metadata
+    const metadata: Record<string, unknown> = {
       videoId,
       platform: 'youtube',
-      url
+      url,
+      transcriptAvailable: false
     };
 
-    const content = `YouTube Video: ${videoId}\n\nContent would be fetched using YouTube API or transcription service.`;
+    // Fetch page metadata first
+    let pageMetadata: { title?: string; description?: string; duration?: string; author?: string; thumbnail?: string } = {};
+    try {
+      pageMetadata = await this.fetchYouTubePageMetadata(url);
+      Object.assign(metadata, pageMetadata);
+    } catch (metadataError: any) {
+      logger.warn('Failed to fetch YouTube page metadata', { videoId, error: metadataError.message });
+    }
+
+    // Attempt to fetch transcript
+    let transcript = '';
+    try {
+      const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+
+      if (transcriptItems && transcriptItems.length > 0) {
+        // Combine all transcript segments into full text
+        transcript = transcriptItems
+          .map(item => item.text)
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        metadata.transcriptAvailable = true;
+        metadata.transcriptSegments = transcriptItems.length;
+        metadata.transcriptDuration = transcriptItems[transcriptItems.length - 1]?.offset || 0;
+
+        logger.info('Successfully extracted YouTube transcript', {
+          videoId,
+          segments: transcriptItems.length,
+          wordCount: transcript.split(/\s+/).length
+        });
+      }
+    } catch (transcriptError: any) {
+      logger.warn('Failed to fetch YouTube transcript, falling back to metadata only', {
+        videoId,
+        error: transcriptError.message
+      });
+      // Continue without transcript - we'll use description as content
+    }
+
+    // Build content from transcript or fallback to description
+    let content = '';
+    if (transcript) {
+      content = `# ${pageMetadata.title || `YouTube Video: ${videoId}`}\n\n`;
+      content += `## Transcript\n\n${transcript}`;
+
+      if (pageMetadata.description) {
+        content += `\n\n## Description\n\n${pageMetadata.description}`;
+      }
+    } else {
+      // Fallback to metadata-only content
+      content = `# ${pageMetadata.title || `YouTube Video: ${videoId}`}\n\n`;
+      if (pageMetadata.description) {
+        content += `${pageMetadata.description}\n\n`;
+      }
+      content += `[Note: Transcript not available for this video. Analysis based on available metadata.]`;
+    }
 
     return { content, metadata };
+  }
+
+  /** Fetch basic metadata from YouTube page HTML */
+  private async fetchYouTubePageMetadata(url: string): Promise<{
+    title?: string;
+    description?: string;
+    duration?: string;
+    author?: string;
+    thumbnail?: string;
+  }> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.config.timeouts.fetchContent);
+
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const htmlText = await response.text();
+      const $ = cheerio.load(htmlText);
+
+      // Extract metadata from HTML
+      const title = $('meta[property="og:title"]').attr('content') ||
+                   $('meta[name="title"]').attr('content') ||
+                   $('title').text().replace(' - YouTube', '').trim();
+
+      const description = $('meta[property="og:description"]').attr('content') ||
+                         $('meta[name="description"]').attr('content') || '';
+
+      const author = $('link[itemprop="name"]').attr('content') ||
+                    $('span[itemprop="author"] link[itemprop="name"]').attr('content') || '';
+
+      const thumbnail = $('meta[property="og:image"]').attr('content') || '';
+
+      return {
+        title: title || undefined,
+        description: description || undefined,
+        author: author || undefined,
+        thumbnail: thumbnail || undefined
+      };
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
 
   /** Fetch web content (articles, papers) */
