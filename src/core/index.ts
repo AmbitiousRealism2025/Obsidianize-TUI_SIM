@@ -2,8 +2,8 @@
  * Obsidianize Core Module
  * Main entry point for the data processing pipeline
  *
- * Version: 1.0.0
- * Last Updated: October 11, 2024
+ * Phase 3 Enhanced - Version: 2.0.0
+ * Last Updated: November 2024
  */
 
 // ============================================================================
@@ -123,6 +123,61 @@ export {
   AIProcessor,
   ProcessingError as CoreProcessingError
 } from './processor.js';
+
+// ============================================================================
+// CONFIGURATION EXPORTS (Phase 3)
+// ============================================================================
+
+export {
+  getConfig,
+  buildConfig,
+  resetConfig,
+  setConfig,
+  validateConfig,
+  detectEnvironment,
+  isProduction,
+  isDevelopment,
+  isStaging,
+  isTest,
+  getEnvironmentName,
+  type Environment,
+  type ApplicationConfig,
+  type ServerConfig,
+  type CacheConfiguration,
+  type RateLimitConfiguration,
+  type AIConfiguration,
+  type LoggingConfiguration,
+  type SecurityConfiguration,
+  type PerformanceConfiguration,
+  type BatchConfiguration,
+  type PWAConfiguration
+} from './config/index.js';
+
+// ============================================================================
+// REQUEST CONTEXT EXPORTS (Phase 3)
+// ============================================================================
+
+export {
+  generateRequestId,
+  isValidRequestId,
+  createRequestContext,
+  setRequestContext,
+  getRequestContext,
+  getRequestId,
+  clearRequestContext,
+  withRequestContext,
+  setContextAttribute,
+  getContextAttribute,
+  setApiKeyHash,
+  setRateLimitTier,
+  getElapsedTime,
+  createTimingSpan,
+  addContextHeaders,
+  createChildContext,
+  getLoggingContext,
+  type RequestContext,
+  type RequestMetadata
+} from './request-context/index.js';
 
 // ============================================================================
 // MAIN API FUNCTIONS
@@ -317,7 +372,7 @@ export function getSystemInfo(): {
   features: string[];
 } {
   return {
-    version: '1.0.0',
+    version: '2.0.0',
     nodeVersion: process.version,
     platform: process.platform,
     features: [
@@ -325,7 +380,14 @@ export function getSystemInfo(): {
       'ai-processing',
       'markdown-formatting',
       'validation',
-      'caching'
+      'caching',
+      'batch-processing',
+      'custom-prompts',
+      'summarization-levels',
+      'export-formats',
+      'response-compression',
+      'pwa-support',
+      'request-tracking'
     ]
   };
 }
