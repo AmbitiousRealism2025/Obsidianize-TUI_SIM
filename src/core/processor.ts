@@ -8,6 +8,9 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
+import { createLogger } from './logging/index.js';
+
+const logger = createLogger('processor');
 import * as cheerio from 'cheerio';
 import { PDFParse } from 'pdf-parse';
 import type {
@@ -371,7 +374,7 @@ Language: ${options.language || 'English'}`;
         };
       }
     } catch (error) {
-      console.warn('Failed to parse AI response as JSON, falling back to text extraction');
+      logger.warn('Failed to parse AI response as JSON, falling back to text extraction');
     }
 
     // Fallback: extract from plain text

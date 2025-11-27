@@ -8,6 +8,9 @@
  */
 
 import { NumericCircularBuffer } from './utils/circular-buffer.js';
+import { createLogger } from './logging/index.js';
+
+const logger = createLogger('performance');
 import { PERFORMANCE, TIME, SIZE } from './constants/index.js';
 
 export interface PerformanceMetrics {
@@ -241,7 +244,7 @@ export class PerformanceMonitor {
 
     // Log critical alerts
     if (alert.severity === 'critical') {
-      console.error(`🚨 Performance Alert: ${alert.message}`);
+      logger.error('Performance Alert', new Error(alert.message), { alert });
     }
   }
 

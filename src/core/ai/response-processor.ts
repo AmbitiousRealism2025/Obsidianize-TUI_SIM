@@ -1,5 +1,8 @@
 import { ContentType } from './content-analyzer';
 import { GenerationResponse } from './gemini-client';
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('response-processor');
 
 export interface ProcessedGeminiGem {
   frontmatter: GeminiGemFrontmatter;
@@ -98,7 +101,10 @@ export class ResponseProcessor {
         }
       };
 
-      console.log(`Response processed successfully in ${Date.now() - startTime}ms with quality score: ${qualityScore.overallScore}`);
+      logger.debug('Response processed successfully', {
+        processingTime: Date.now() - startTime,
+        qualityScore: qualityScore.overallScore
+      });
       return processedGeminiGem;
 
     } catch (error: any) {
@@ -129,7 +135,7 @@ export class ResponseProcessor {
       const frontmatter = this.parseSimpleYaml(yamlContent);
       return { frontmatter, content };
     } catch (error) {
-      console.warn('Failed to parse YAML frontmatter:', error);
+      logger.warn('Failed to parse YAML frontmatter', { error });
       return {
         frontmatter: {},
         content: text.trim()

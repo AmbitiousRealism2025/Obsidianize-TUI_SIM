@@ -2,6 +2,9 @@ import { GeminiClient, GenerationRequest } from './gemini-client';
 import { ContentAnalyzer, ExtractedContent, ContentType } from './content-analyzer';
 import { PromptFactory } from './prompts/prompt-factory';
 import { ResponseProcessor, ProcessedGeminiGem } from './response-processor';
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('ai-service');
 
 export interface AnalysisOptions {
   customInstructions?: string;
@@ -41,32 +44,32 @@ export class AIService {
    */
   async analyzeContent(url: string, options: AnalysisOptions = {}): Promise<AnalysisResult> {
     const startTime = Date.now();
-    console.log(`Starting AI analysis for: ${url}`);
+    logger.info('Starting AI analysis', { url });
 
     try {
       // Step 1: Extract content from URL
-      console.log('Step 1: Extracting content from URL...');
+      logger.debug('Extracting content from URL');
       const extractedContent = await ContentAnalyzer.analyzeContent(url);
 
       // Validate extracted content
       const contentErrors = ContentAnalyzer.validateExtractedContent(extractedContent);
       if (contentErrors.length > 0) {
-        console.warn('Content validation warnings:', contentErrors);
+        logger.warn('Content validation warnings', { errors: contentErrors });
       }
 
       // Step 2: Generate AI analysis
-      console.log('Step 2: Generating AI analysis...');
+      logger.debug('Generating AI analysis');
       const processedGeminiGem = await this.generateAnalysis(extractedContent, options);
 
       // Step 3: Final validation
-      console.log('Step 3: Final validation...');
+      logger.debug('Performing final validation');
       const validationErrors = ResponseProcessor.validateGeminiGemFormat(processedGeminiGem);
       if (validationErrors.length > 0) {
-        console.warn('Final validation warnings:', validationErrors);
+        logger.warn('Final validation warnings', { errors: validationErrors });
       }
 
       const processingTime = Date.now() - startTime;
-      console.log(`AI analysis completed successfully in ${processingTime}ms`);
+      logger.info('AI analysis completed successfully', { processingTime, url });
 
       return {
         success: true,
@@ -84,7 +87,7 @@ export class AIService {
 
     } catch (error: any) {
       const processingTime = Date.now() - startTime;
-      console.error(`AI analysis failed after ${processingTime}ms:`, error.message);
+      logger.error('AI analysis failed', error, { processingTime, url });
 
       return {
         success: false,
@@ -145,7 +148,7 @@ export class AIService {
    * Batch analyze multiple URLs
    */
   async analyzeBatch(urls: string[], options: AnalysisOptions = {}): Promise<AnalysisResult[]> {
-    console.log(`Starting batch analysis of ${urls.length} URLs`);
+    logger.info('Starting batch analysis', { urlCount: urls.length });
     const results: AnalysisResult[] = [];
 
     // Process URLs in parallel with rate limiting
@@ -182,7 +185,7 @@ export class AIService {
     }
 
     const successCount = results.filter(r => r.success).length;
-    console.log(`Batch analysis completed: ${successCount}/${urls.length} successful`);
+    logger.info('Batch analysis completed', { successCount, totalUrls: urls.length });
 
     return results;
   }
@@ -268,7 +271,7 @@ Processing Time: ${result.processingTime}ms`;
         overall: geminiHealthy
       };
     } catch (error) {
-      console.error('AI service health check failed:', error);
+      logger.error('AI service health check failed', error);
       return {
         gemini: false,
         overall: false

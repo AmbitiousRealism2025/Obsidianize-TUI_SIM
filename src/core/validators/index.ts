@@ -18,6 +18,12 @@ import {
   SafetyThreshold
 } from '../types/index.js';
 import { ssrfProtection, type SSRFValidationResult } from './ssrf-protection.js';
+import {
+  ApiKeyValidator as NewApiKeyValidator,
+  validateApiKeyFormat,
+  validateGeminiKey,
+  type ApiKeyValidationResult
+} from './api-key-validator.js';
 import type {
   GeminiGem,
   ProcessingRequest,
@@ -593,9 +599,9 @@ export class URLValidator {
   }
 }
 
-/** API key validator */
+/** API key validator (DEPRECATED - Use ApiKeyValidator from api-key-validator.ts) */
 export class ApiKeyValidator {
-  /** Validate Gemini API key format */
+  /** Validate Gemini API key format (DEPRECATED) */
   static validateGeminiKey(key: string): { valid: boolean; error?: string } {
     if (!key || typeof key !== 'string') {
       return { valid: false, error: 'API key is required' };
@@ -617,7 +623,7 @@ export class ApiKeyValidator {
     return { valid: true };
   }
 
-  /** Test API key with minimal request */
+  /** Test API key with minimal request (DEPRECATED - consumes API quota) */
   static async testGeminiKey(key: string): Promise<{ valid: boolean; error?: string }> {
     const formatValidation = this.validateGeminiKey(key);
     if (!formatValidation.valid) {
@@ -722,3 +728,18 @@ export class InputSanitizer {
     return key.substring(0, 8) + '...' + key.substring(key.length - 4);
   }
 }
+
+// ============================================================================
+// EXPORTS - API Key Validation
+// ============================================================================
+
+/**
+ * Export new API key validator (recommended)
+ * Provides format-only validation without consuming API quota
+ */
+export {
+  NewApiKeyValidator as ApiKeyValidatorV2,
+  validateApiKeyFormat,
+  validateGeminiKey,
+  type ApiKeyValidationResult
+};
