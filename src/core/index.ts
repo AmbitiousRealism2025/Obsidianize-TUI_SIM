@@ -146,7 +146,8 @@ import {
   ErrorCategory,
   OutputFormat as OutputFormatEnum
 } from './types/index.js';
-import { FormatterFactory } from './formatters/index.js';
+import { FormatterFactory, ContentStructureUtils } from './formatters/index.js';
+import { URLValidator, InputSanitizer } from './validators/index.js';
 
 /** Global processor instance */
 let globalProcessor: DataProcessor | null = null;
@@ -213,7 +214,6 @@ export async function formatGeminiGem(
  * @returns Validation result with content type
  */
 export function validateUrl(url: string): { valid: boolean; type: ContentType; error?: string } {
-  const { URLValidator } = require('./validators/index.js');
   return URLValidator.validateAndClassify(url);
 }
 
@@ -224,7 +224,6 @@ export function validateUrl(url: string): { valid: boolean; type: ContentType; e
  * @returns Generated filename
  */
 export function createFilename(gem: GeminiGem, pattern?: string): string {
-  const { ContentStructureUtils } = require('./formatters/index.js');
   return ContentStructureUtils.createFilename(gem, pattern);
 }
 
@@ -235,7 +234,6 @@ export function createFilename(gem: GeminiGem, pattern?: string): string {
  * @returns Sanitized text
  */
 export function sanitizeInput(text: string, maxLength?: number): string {
-  const { InputSanitizer } = require('./validators/index.js');
   return InputSanitizer.sanitizeText(text, maxLength);
 }
 

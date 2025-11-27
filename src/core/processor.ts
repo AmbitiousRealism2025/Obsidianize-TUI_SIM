@@ -9,7 +9,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-const pdfParse = require('pdf-parse');
+import pdfParse from 'pdf-parse';
 import type {
   GeminiGem,
   ProcessingRequest,
