@@ -1,8 +1,20 @@
 import figlet from "figlet";
-import { handleApiRequest, applyMiddleware, handleWebSocketUpgrade, websocketHandlers } from './src/web/server/index.js';
+import {
+  handleApiRequest,
+  handleEnhancedApiRequest,
+  applyMiddleware,
+  handleWebSocketUpgrade,
+  websocketHandlers,
+  responseCacheMiddleware,
+  compressionMiddleware
+} from './src/web/server/index.js';
 import { createLogger } from './src/core/logging/index.js';
+import { getConfig, isProduction } from './src/core/config/index.js';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
 
 const logger = createLogger('server');
+const config = getConfig();
 
 // Box drawing characters for styling - optimized for ASCII art width
 // ASCII art is 76 chars wide, so border is 76 + 8 (4 chars padding each side) + 4 (border chars) = 88
@@ -10,6 +22,9 @@ const borderWidth = 88;
 const topBorder = "╔" + "═".repeat(borderWidth - 2) + "╗";
 const bottomBorder = "╚" + "═".repeat(borderWidth - 2) + "╝";
 const sideBorder = "║";
+
+// Static file paths for PWA
+const UI_PATH = join(import.meta.dir, 'src/web/ui');
 
 export const app = {
   async fetch(req: Request, server: any): Promise<Response> {
@@ -24,25 +39,85 @@ export const app = {
       return new Response('WebSocket upgrade failed', { status: 400 });
     }
 
-    // Handle API routes
+    // Serve PWA manifest
+    if (url.pathname === '/manifest.json') {
+      const manifestPath = join(UI_PATH, 'manifest.json');
+      if (existsSync(manifestPath)) {
+        const manifest = readFileSync(manifestPath, 'utf-8');
+        return new Response(manifest, {
+          headers: { 'Content-Type': 'application/manifest+json' }
+        });
+      }
+    }
+
+    // Serve service worker
+    if (url.pathname === '/sw.js') {
+      const swPath = join(UI_PATH, 'sw.js');
+      if (existsSync(swPath)) {
+        const sw = readFileSync(swPath, 'utf-8');
+        return new Response(sw, {
+          headers: {
+            'Content-Type': 'application/javascript',
+            'Service-Worker-Allowed': '/'
+          }
+        });
+      }
+    }
+
+    // Serve static CSS
+    if (url.pathname === '/styles/terminal.css') {
+      const cssPath = join(UI_PATH, 'styles/terminal.css');
+      if (existsSync(cssPath)) {
+        const css = readFileSync(cssPath, 'utf-8');
+        return new Response(css, {
+          headers: { 'Content-Type': 'text/css' }
+        });
+      }
+    }
+
+    // Serve static JS
+    if (url.pathname === '/scripts/app.js') {
+      const jsPath = join(UI_PATH, 'scripts/app.js');
+      if (existsSync(jsPath)) {
+        const js = readFileSync(jsPath, 'utf-8');
+        return new Response(js, {
+          headers: { 'Content-Type': 'application/javascript' }
+        });
+      }
+    }
+
+    // Handle API routes with full middleware stack
     if (url.pathname.startsWith('/api/')) {
       return applyMiddleware(req, async (req) => {
-        const apiResponse = await handleApiRequest(req);
-        if (apiResponse) {
-          return apiResponse;
-        }
+        // Apply caching middleware
+        return responseCacheMiddleware(req, async (req) => {
+          // Apply compression middleware
+          return compressionMiddleware(req, async (req) => {
+            // Try enhanced routes first (Phase 3 features)
+            const enhancedResponse = await handleEnhancedApiRequest(req);
+            if (enhancedResponse) {
+              return enhancedResponse;
+            }
 
-        // No matching API route
-        return new Response(
-          JSON.stringify({
-            error: 'Not found',
-            code: 'NOT_FOUND'
-          }),
-          {
-            status: 404,
-            headers: { 'Content-Type': 'application/json' }
-          }
-        );
+            // Fall back to standard routes
+            const apiResponse = await handleApiRequest(req);
+            if (apiResponse) {
+              return apiResponse;
+            }
+
+            // No matching API route
+            return new Response(
+              JSON.stringify({
+                error: 'Not found',
+                code: 'NOT_FOUND'
+              }),
+              {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+              }
+            );
+          });
+        });
       });
     }
 
@@ -92,6 +167,14 @@ export const app = {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OBSIDIANIZE</title>
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="Transform web content into structured Markdown notes using AI">
+  <meta name="theme-color" content="#9b59d0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Obsidianize">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
   <style>
     body {
       background-color: #0f0f23;
@@ -153,12 +236,26 @@ ${centeredLines.map(line => `    <pre><span class="border">${sideBorder}</span><
     <div class="api-info">
       <strong>API Endpoints:</strong><br>
       • <a href="/api/health">GET /api/health</a> - Health check<br>
+      • <a href="/api/dashboard">GET /api/dashboard</a> - System dashboard<br>
       • POST /api/process - Start content processing<br>
       • GET /api/status/:id - Get job status<br>
-      • GET /api/download/:id - Download result<br>
+      • GET /api/download/:id - Download result (Markdown)<br>
+      • GET /api/export/:id - Export result (JSON/YAML)<br>
+      • POST /api/batch - Batch process multiple URLs<br>
+      • <a href="/api/prompts">GET /api/prompts</a> - Custom prompt templates<br>
       • WS /ws/progress/:id - Real-time updates
     </div>
   </div>
+  <script>
+    // Register Service Worker for PWA support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </body>
 </html>`;
       return new Response(htmlOutput, {
@@ -176,9 +273,17 @@ ${centeredLines.map(line => `    <pre><span class="border">${sideBorder}</span><
 };
 
 if (import.meta.main) {
+  const port = config.server.port;
+  const host = config.server.host;
   const server = Bun.serve({
     ...app,
-    port: 3000,
+    port,
+    hostname: host,
   });
-  console.log(`Listening on http://localhost:${server.port} ...`);
+  logger.info(`Server started`, {
+    url: `http://${host}:${server.port}`,
+    environment: config.environment,
+    version: config.version
+  });
+  console.log(`Listening on http://${host}:${server.port} ...`);
 }
