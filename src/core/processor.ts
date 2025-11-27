@@ -323,7 +323,8 @@ class ContentFetcher {
         }
       });
 
-      clearTimeout(timeoutId);
+      // Note: Don't clear timeout here - keep it active during body download
+      // The timeout is cleared in the finally block after all reads complete
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

@@ -24,7 +24,7 @@
 
 ## Documentation and Developer Experience
 - The top-level README communicates vision, phase status, ASCII-art identity, and development commands, giving newcomers a clear runway for Phase 2 work.【F:README.md†L1-L76】
-- Planning collateral (e.g., `warp_planning/*`, `Kiro_planning/*`) remains intact for historical and architectural reference, though Phase 2 implementation notes live primarily in `src/web` markdown guides.
+- **Update (Nov 2025):** Planning collateral (`warp_planning/*`, `Kiro_planning/*`) has been archived to `archive/phase1-historical/`. Current documentation lives in `docs/`, `CLAUDE.md`, and `API_GUIDE.md`. All stale references in README.md, agents.md, and CLAUDE.md have been updated.
 
 ## Risks and Open Issues
 - **Feature completeness:** Web TUI assets referenced in `index.ts` (`src/web/ui` paths) are not present in the repository, so the server will return 404s for static asset requests until the UI lands.【F:index.ts†L23-L62】
