@@ -2,6 +2,9 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 // import pdfParse from 'pdf-parse';
 import { URL } from 'url';
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('content-analyzer');
 
 export type ContentType = 'youtube' | 'article' | 'paper' | 'podcast' | 'unknown';
 
@@ -68,7 +71,7 @@ export class ContentAnalyzer {
 
     // Detect content type
     const contentType = this.detectContentType(url);
-    console.log(`Detected content type: ${contentType}`);
+    logger.debug('Detected content type', { contentType, url });
 
     // Extract content based on type
     switch (contentType) {

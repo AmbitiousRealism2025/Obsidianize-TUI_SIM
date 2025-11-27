@@ -44,7 +44,8 @@ export enum ErrorCategory {
   PROCESSING = 'processing',
   AUTH = 'auth',
   RATE_LIMIT = 'rate_limit',
-  SYSTEM = 'system'
+  SYSTEM = 'system',
+  CONFIG = 'config'
 }
 
 /** Output format types */

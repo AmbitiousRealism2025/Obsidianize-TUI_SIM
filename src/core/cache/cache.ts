@@ -5,6 +5,9 @@
 
 import { Database } from "bun:sqlite";
 import { performanceMonitor } from "../performance.ts";
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('cache');
 
 export interface CacheEntry<T = any> {
   key: string;
@@ -138,7 +141,7 @@ export class HighPerformanceCache {
         return { data: new Uint8Array(compressed), compressed: true };
       }
     } catch (error) {
-      console.warn('Compression failed:', error);
+      logger.warn('Compression failed', { error });
     }
 
     return { data, compressed: false };
@@ -156,7 +159,7 @@ export class HighPerformanceCache {
       const decompressed = Bun.gunzipSync(data as any);
       return new Uint8Array(decompressed as any);
     } catch (error) {
-      console.warn('Decompression failed:', error);
+      logger.warn('Decompression failed', { error });
       return data;
     }
   }
@@ -196,7 +199,7 @@ export class HighPerformanceCache {
 
       return value;
     } catch (error) {
-      console.error('Cache get error:', error);
+      logger.error('Cache get error', error);
       this.stats.totalMisses++;
       this.updateHitRate();
       performanceMonitor.recordCacheAccess(false, performance.now() - startTime);
@@ -251,7 +254,7 @@ export class HighPerformanceCache {
 
       this.updateStats();
     } catch (error) {
-      console.error('Cache set error:', error);
+      logger.error('Cache set error', error);
       throw error;
     }
   }
@@ -269,7 +272,7 @@ export class HighPerformanceCache {
       this.updateStats();
       return result.changes > 0;
     } catch (error) {
-      console.error('Cache delete error:', error);
+      logger.error('Cache delete error', error);
       return false;
     }
   }
@@ -288,7 +291,7 @@ export class HighPerformanceCache {
 
       this.updateStats();
     } catch (error) {
-      console.error('Cache clear error:', error);
+      logger.error('Cache clear error', error);
     }
   }
 
@@ -364,7 +367,7 @@ export class HighPerformanceCache {
         this.updateStats();
       }
     } catch (error) {
-      console.error('Cache cleanup error:', error);
+      logger.error('Cache cleanup error', error);
     }
   }
 
@@ -397,7 +400,7 @@ export class HighPerformanceCache {
       this.stats.oldestEntry = oldest.oldest;
       this.stats.newestEntry = newest.newest;
     } catch (error) {
-      console.error('Stats update error:', error);
+      logger.error('Stats update error', error);
     }
   }
 
@@ -435,7 +438,7 @@ export class HighPerformanceCache {
       const result = query.get(key, now);
       return result !== null;
     } catch (error) {
-      console.error('Cache has error:', error);
+      logger.error('Cache has error', error);
       return false;
     }
   }

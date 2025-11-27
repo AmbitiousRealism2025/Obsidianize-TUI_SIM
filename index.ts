@@ -1,4 +1,8 @@
 import figlet from "figlet";
+import { handleApiRequest, applyMiddleware, handleWebSocketUpgrade, websocketHandlers } from './src/web/server/index.js';
+import { createLogger } from './src/core/logging/index.js';
+
+const logger = createLogger('server');
 
 // Box drawing characters for styling - optimized for ASCII art width
 // ASCII art is 76 chars wide, so border is 76 + 8 (4 chars padding each side) + 4 (border chars) = 88
@@ -8,8 +12,41 @@ const bottomBorder = "╚" + "═".repeat(borderWidth - 2) + "╝";
 const sideBorder = "║";
 
 export const app = {
-  fetch(req: Request): Response | Promise<Response> {
+  async fetch(req: Request, server: any): Promise<Response> {
     const url = new URL(req.url);
+
+    // Handle WebSocket upgrade requests
+    if (url.pathname.startsWith('/ws/')) {
+      const upgraded = handleWebSocketUpgrade(req, server);
+      if (upgraded) {
+        return new Response(null); // Connection will be upgraded
+      }
+      return new Response('WebSocket upgrade failed', { status: 400 });
+    }
+
+    // Handle API routes
+    if (url.pathname.startsWith('/api/')) {
+      return applyMiddleware(req, async (req) => {
+        const apiResponse = await handleApiRequest(req);
+        if (apiResponse) {
+          return apiResponse;
+        }
+
+        // No matching API route
+        return new Response(
+          JSON.stringify({
+            error: 'Not found',
+            code: 'NOT_FOUND'
+          }),
+          {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      });
+    }
+
+    // Serve ASCII art homepage
     const isHtml = !url.searchParams.has("plain");
 
     // Generate ASCII art with a stylish font
@@ -25,7 +62,7 @@ export const app = {
     const asciiWidth = 76; // OBSIDIANIZE ASCII art is exactly 76 chars wide
     const leftPadding = Math.floor((innerWidth - asciiWidth) / 2);
     const rightPadding = innerWidth - asciiWidth - leftPadding;
-    
+
     const centeredLines = lines.map((line) => {
       return `${sideBorder} ${" ".repeat(leftPadding)}${line}${" ".repeat(rightPadding)} ${sideBorder}`;
     });
@@ -34,7 +71,7 @@ export const app = {
     const tagline = "✨ Your Knowledge, Crystallized ✨";
     const taglinePadding = Math.floor((borderWidth - tagline.length) / 2);
     const centeredTagline = " ".repeat(taglinePadding) + tagline;
-    
+
     // Build the complete styled output
     const plainOutput = [
       topBorder,
@@ -88,6 +125,21 @@ export const app = {
       margin-top: 20px;
       font-size: 16px;
     }
+    .api-info {
+      color: #a78bfa;
+      margin-top: 30px;
+      font-size: 14px;
+      text-align: left;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .api-info a {
+      color: #c084fc;
+      text-decoration: none;
+    }
+    .api-info a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +150,14 @@ ${centeredLines.map(line => `    <pre><span class="border">${sideBorder}</span><
     <pre class="border">${sideBorder}${" ".repeat(borderWidth - 2)}${sideBorder}</pre>
     <pre class="border">${bottomBorder}</pre>
     <div class="tagline">${tagline}</div>
+    <div class="api-info">
+      <strong>API Endpoints:</strong><br>
+      • <a href="/api/health">GET /api/health</a> - Health check<br>
+      • POST /api/process - Start content processing<br>
+      • GET /api/status/:id - Get job status<br>
+      • GET /api/download/:id - Download result<br>
+      • WS /ws/progress/:id - Real-time updates
+    </div>
   </div>
 </body>
 </html>`;
@@ -110,6 +170,9 @@ ${centeredLines.map(line => `    <pre><span class="border">${sideBorder}</span><
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   },
+
+  // WebSocket handlers
+  websocket: websocketHandlers
 };
 
 if (import.meta.main) {

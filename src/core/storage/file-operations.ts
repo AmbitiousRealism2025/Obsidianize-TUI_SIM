@@ -6,6 +6,9 @@
 import { promises as fs } from "fs";
 import { join, dirname, basename } from "path";
 import { performanceMonitor } from "../performance.ts";
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('file-operations');
 
 export interface FileOptions {
   encoding?: BufferEncoding;
@@ -107,7 +110,7 @@ export class AtomicFileOperations {
       this.locks.delete(filePath);
     } catch (error) {
       // Lock might not exist or was already removed
-      console.warn(`Failed to release lock for ${filePath}:`, error);
+      logger.warn('Failed to release lock', { filePath, error });
     }
   }
 
@@ -126,7 +129,7 @@ export class AtomicFileOperations {
         return compressed;
       }
     } catch (error) {
-      console.warn('Compression failed:', error);
+      logger.warn('Compression failed', { error });
     }
 
     return data;
@@ -174,7 +177,7 @@ export class AtomicFileOperations {
         checksum,
       };
     } catch (error) {
-      console.warn(`Failed to create backup for ${filePath}:`, error);
+      logger.warn('Failed to create backup', { filePath, error });
       return null;
     }
   }
@@ -339,7 +342,7 @@ export class AtomicFileOperations {
         await this.releaseLock(filePath);
       }
     } catch (error) {
-      console.warn(`Failed to delete file ${filePath}:`, error);
+      logger.warn('Failed to delete file', { filePath, error });
       return false;
     }
   }
@@ -410,7 +413,7 @@ export class AtomicFileOperations {
         backupCount,
       };
     } catch (error) {
-      console.warn(`Failed to get stats for ${filePath}:`, error);
+      logger.warn('Failed to get stats', { filePath, error });
       return null;
     }
   }
@@ -449,7 +452,7 @@ export class AtomicFileOperations {
 
       return backups.sort((a, b) => b.timestamp - a.timestamp);
     } catch (error) {
-      console.warn(`Failed to list backups for ${filePath}:`, error);
+      logger.warn('Failed to list backups', { filePath, error });
       return [];
     }
   }
@@ -472,7 +475,7 @@ export class AtomicFileOperations {
       await this.copyFile(backup.backupPath, filePath);
       return true;
     } catch (error) {
-      console.warn(`Failed to restore backup for ${filePath}:`, error);
+      logger.warn('Failed to restore backup', { filePath, error });
       return false;
     }
   }
@@ -513,7 +516,7 @@ export class AtomicFileOperations {
         }
       }
     } catch (error) {
-      console.warn(`Failed to cleanup backups for ${filePath}:`, error);
+      logger.warn('Failed to cleanup backups', { filePath, error });
     }
   }
 
@@ -534,7 +537,7 @@ export class AtomicFileOperations {
         }
       }
     } catch (error) {
-      console.warn(`Failed to cleanup backups in ${directory}:`, error);
+      logger.warn('Failed to cleanup backups in directory', { directory, error });
     }
   }
 
@@ -554,7 +557,7 @@ export class AtomicFileOperations {
       const stats = await this.getFileStats(filePath);
       return stats ? stats.checksum === actualChecksum : false;
     } catch (error) {
-      console.warn(`Failed to verify file ${filePath}:`, error);
+      logger.warn('Failed to verify file', { filePath, error });
       return false;
     }
   }
@@ -567,7 +570,7 @@ export class AtomicFileOperations {
       try {
         await this.releaseLock(filePath);
       } catch (error) {
-        console.warn(`Failed to release lock for ${filePath}:`, error);
+        logger.warn('Failed to release lock', { filePath, error });
       }
     }
     this.locks.clear();

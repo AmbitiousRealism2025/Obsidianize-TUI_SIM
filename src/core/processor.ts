@@ -8,8 +8,11 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
+import { createLogger } from './logging/index.js';
+
+const logger = createLogger('processor');
 import * as cheerio from 'cheerio';
-import pdfParse from 'pdf-parse';
+import { PDFParse } from 'pdf-parse';
 import type {
   GeminiGem,
   ProcessingRequest,
@@ -217,16 +220,19 @@ class ContentFetcher {
     };
 
     if (contentType.includes('application/pdf')) {
-      // Handle PDF content
+      // Handle PDF content using pdf-parse v2 API
       const buffer = Buffer.from(response.data);
-      const pdfData = await pdfParse(buffer);
-      content = pdfData.text;
+      const pdfParser = new PDFParse({ data: new Uint8Array(buffer) });
+      const textResult = await pdfParser.getText();
+      const infoResult = await pdfParser.getInfo();
+      content = textResult.text;
       metadata = {
         ...metadata,
-        pages: pdfData.numpages,
-        info: pdfData.info,
-        metadata: pdfData.metadata
+        pages: infoResult.total,
+        info: infoResult.info,
+        metadata: infoResult.metadata
       };
+      await pdfParser.destroy();
     } else {
       // Handle HTML content
       const $ = cheerio.load(response.data);
@@ -368,7 +374,7 @@ Language: ${options.language || 'English'}`;
         };
       }
     } catch (error) {
-      console.warn('Failed to parse AI response as JSON, falling back to text extraction');
+      logger.warn('Failed to parse AI response as JSON, falling back to text extraction');
     }
 
     // Fallback: extract from plain text

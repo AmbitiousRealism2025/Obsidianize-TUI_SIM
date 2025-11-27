@@ -5,6 +5,9 @@
 
 import { Database } from "bun:sqlite";
 import { performanceMonitor } from "../performance.ts";
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('rate-limiter');
 
 export interface RateLimitConfig {
   tokens: number;
@@ -341,7 +344,7 @@ export class RateLimiter {
       performanceMonitor.recordRequest(performance.now() - startTime);
       return result;
     } catch (error) {
-      console.error('Rate limit check error:', error);
+      logger.error('Rate limit check error', error);
 
       // Fail open - allow request on error
       return {
@@ -448,7 +451,7 @@ export class RateLimiter {
       performanceMonitor.recordRequest(performance.now() - startTime);
       return result;
     } catch (error) {
-      console.error('Global rate limit check error:', error);
+      logger.error('Global rate limit check error', error);
 
       // Fail open - allow request on error
       return {
@@ -499,7 +502,7 @@ export class RateLimiter {
       // Cleanup old analytics data (keep last 30 days)
       this.cleanupAnalytics();
     } catch (error) {
-      console.warn('Failed to record usage:', error);
+      logger.warn('Failed to record usage', { error });
     }
   }
 
@@ -512,7 +515,7 @@ export class RateLimiter {
       const cleanup = this.db.prepare("DELETE FROM usage_stats WHERE timestamp < ?");
       cleanup.run(cutoffTime);
     } catch (error) {
-      console.warn('Failed to cleanup analytics:', error);
+      logger.warn('Failed to cleanup analytics', { error });
     }
   }
 
@@ -593,7 +596,7 @@ export class RateLimiter {
         tierDistribution,
       };
     } catch (error) {
-      console.error('Failed to get analytics:', error);
+      logger.error('Failed to get analytics', error);
       return {
         totalRequests: 0,
         allowedRequests: 0,
@@ -614,7 +617,7 @@ export class RateLimiter {
       const query = this.db.query("DELETE FROM rate_limits WHERE identifier = ?");
       query.run(userId);
     } catch (error) {
-      console.error('Failed to reset user limits:', error);
+      logger.error('Failed to reset user limits', error, { userId });
     }
   }
 
@@ -625,7 +628,7 @@ export class RateLimiter {
     try {
       this.db.run("DELETE FROM rate_limits");
     } catch (error) {
-      console.error('Failed to reset all limits:', error);
+      logger.error('Failed to reset all limits', error);
     }
   }
 
@@ -662,7 +665,7 @@ export class RateLimiter {
 
       return status;
     } catch (error) {
-      console.error('Failed to get user status:', error);
+      logger.error('Failed to get user status', error, { userId });
       return { userId, error: 'Failed to retrieve status' };
     }
   }
@@ -724,7 +727,7 @@ export const rateLimitUtils = {
 
         next();
       } catch (error) {
-        console.error('Rate limit middleware error:', error);
+        logger.error('Rate limit middleware error', error);
         next(); // Continue on error to avoid breaking functionality
       }
     };

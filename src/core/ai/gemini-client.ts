@@ -1,4 +1,7 @@
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
+import { createLogger } from '../logging/index.js';
+
+const logger = createLogger('gemini-client');
 
 export interface GeminiConfig {
   apiKey: string;
@@ -82,7 +85,7 @@ export class GeminiClient {
 
     for (let attempt = 0; attempt <= this.retryConfig.maxRetries; attempt++) {
       try {
-        console.log(`Gemini API attempt ${attempt + 1}/${this.retryConfig.maxRetries + 1}`);
+        logger.debug('Gemini API attempt', { attempt: attempt + 1, maxAttempts: this.retryConfig.maxRetries + 1 });
 
         // Add timeout handling
         const timeoutPromise = new Promise((_, reject) => {
@@ -100,7 +103,7 @@ export class GeminiClient {
         }
 
         const duration = Date.now() - startTime;
-        console.log(`Gemini API success in ${duration}ms`);
+        logger.debug('Gemini API success', { duration });
 
         return {
           text,
@@ -117,18 +120,18 @@ export class GeminiClient {
         lastError = this.processError(error);
 
         if (attempt === this.retryConfig.maxRetries) {
-          console.error(`Gemini API failed after ${attempt + 1} attempts:`, lastError);
+          logger.error('Gemini API failed after retries', lastError, { attempts: attempt + 1 });
           throw lastError;
         }
 
         // Check if we should retry based on error type
         if (!this.shouldRetry(lastError)) {
-          console.error('Gemini API error not retryable:', lastError);
+          logger.error('Gemini API error not retryable', lastError);
           throw lastError;
         }
 
         const delay = this.calculateDelay(attempt);
-        console.warn(`Gemini API attempt ${attempt + 1} failed, retrying in ${delay}ms:`, lastError.message);
+        logger.warn('Gemini API attempt failed, retrying', { attempt: attempt + 1, delay, error: lastError.message });
         await this.sleep(delay);
       }
     }
@@ -244,7 +247,7 @@ export class GeminiClient {
       const response = result.response;
       return response.text().trim() === 'OK';
     } catch (error) {
-      console.error('Gemini health check failed:', error);
+      logger.error('Gemini health check failed', error);
       return false;
     }
   }
@@ -264,7 +267,7 @@ let geminiClient: GeminiClient | null = null;
 
 export function initializeGeminiClient(config: GeminiConfig): GeminiClient {
   if (geminiClient) {
-    console.warn('Gemini client already initialized');
+    logger.warn('Gemini client already initialized');
     return geminiClient;
   }
 

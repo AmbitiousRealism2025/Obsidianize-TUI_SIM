@@ -8,6 +8,9 @@ import { performanceMonitor, measurePerformance, type PerformanceMetrics, type P
 import { cache, cacheUtils, type CacheEntry, type CacheConfig, type CacheStats } from './cache/cache.ts';
 import { fileOps, fileUtils, type FileOptions, type FileStats, type BackupInfo } from './storage/file-operations.ts';
 import { rateLimiter, rateLimitUtils, type RateLimitConfig, type RateLimitTier, type RateLimitResult, type UsageStats, type RateLimitAnalytics } from './rate-limit/rate-limiter.ts';
+import { createLogger } from './logging/index.js';
+
+const logger = createLogger('performance-system');
 
 // Re-export everything for convenience
 export {
@@ -40,7 +43,7 @@ export class ObsidianizeCore {
    * Initialize all core components
    */
   static async initialize(): Promise<void> {
-    console.log('🚀 Initializing Obsidianize Core Components...');
+    logger.info('Initializing Obsidianize Core Components');
 
     // Mark startup start time
     const startTime = performance.now();
@@ -61,13 +64,13 @@ export class ObsidianizeCore {
       performanceMonitor.markStartupComplete();
 
       const initTime = performance.now() - startTime;
-      console.log(`✅ Core components initialized in ${initTime.toFixed(2)}ms`);
+      logger.info('Core components initialized successfully', { initTime });
 
       // Log performance metrics
-      console.log(performanceMonitor.generateReport());
+      logger.debug('Performance report', { report: performanceMonitor.generateReport() });
 
     } catch (error) {
-      console.error('❌ Failed to initialize core components:', error);
+      logger.error('Failed to initialize core components', error);
       throw error;
     }
   }
@@ -76,7 +79,7 @@ export class ObsidianizeCore {
    * Graceful shutdown of all components
    */
   static async shutdown(): Promise<void> {
-    console.log('🛑 Shutting down Obsidianize Core Components...');
+    logger.info('Shutting down Obsidianize Core Components');
 
     try {
       // Release file locks
@@ -89,9 +92,9 @@ export class ObsidianizeCore {
       // Cleanup performance monitoring
       performanceMonitor.cleanup();
 
-      console.log('✅ Core components shut down successfully');
+      logger.info('Core components shut down successfully');
     } catch (error) {
-      console.error('❌ Error during shutdown:', error);
+      logger.error('Error during shutdown', error);
     }
   }
 
@@ -118,7 +121,7 @@ export class ObsidianizeCore {
         timestamp: Date.now(),
       };
     } catch (error) {
-      console.error('Failed to get system status:', error);
+      logger.error('Failed to get system status', error);
       return {
         performance: null,
         cache: null,
@@ -267,26 +270,26 @@ export const CONFIG_PRESETS = {
 
 // Process signal handlers for graceful shutdown
 process.on('SIGINT', async () => {
-  console.log('\n📡 Received SIGINT, shutting down gracefully...');
+  logger.info('Received SIGINT, shutting down gracefully');
   await ObsidianizeCore.shutdown();
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
-  console.log('\n📡 Received SIGTERM, shutting down gracefully...');
+  logger.info('Received SIGTERM, shutting down gracefully');
   await ObsidianizeCore.shutdown();
   process.exit(0);
 });
 
 // Handle uncaught exceptions
 process.on('uncaughtException', async (error) => {
-  console.error('💥 Uncaught Exception:', error);
+  logger.fatal('Uncaught Exception', error);
   await ObsidianizeCore.shutdown();
   process.exit(1);
 });
 
 process.on('unhandledRejection', async (reason, promise) => {
-  console.error('💥 Unhandled Promise Rejection at:', promise, 'reason:', reason);
+  logger.fatal('Unhandled Promise Rejection', reason as Error, { promise: String(promise) });
   await ObsidianizeCore.shutdown();
   process.exit(1);
 });
