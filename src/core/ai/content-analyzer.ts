@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 // import pdfParse from 'pdf-parse';
 import { URL } from 'url';
+import { YoutubeTranscript } from 'youtube-transcript';
 import { createLogger } from '../logging/index.js';
 
 /** Helper function for fetch with timeout */
@@ -192,43 +193,90 @@ export class ContentAnalyzer {
         throw new Error('Could not extract YouTube video ID from URL');
       }
 
-      // For YouTube, we would normally use YouTube Data API
-      // For this implementation, we'll extract basic info from the page
-      const response = await fetchWithTimeout(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      logger.info('Extracting YouTube content', { videoId, url });
+
+      // Fetch page metadata first
+      let title = 'YouTube Video';
+      let description = '';
+      let author = '';
+      let thumbnail = '';
+
+      try {
+        const response = await fetchWithTimeout(url, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          }
+        });
+
+        if (response.ok) {
+          const htmlText = await response.text();
+          const $ = cheerio.load(htmlText);
+
+          // Extract metadata from OpenGraph tags (more reliable)
+          title = $('meta[property="og:title"]').attr('content') ||
+                  $('meta[name="title"]').attr('content') ||
+                  $('title').text().replace(' - YouTube', '').trim() ||
+                  'YouTube Video';
+
+          description = $('meta[property="og:description"]').attr('content') ||
+                       $('meta[name="description"]').attr('content') || '';
+
+          author = $('link[itemprop="name"]').attr('content') ||
+                  $('span[itemprop="author"] link[itemprop="name"]').attr('content') || '';
+
+          thumbnail = $('meta[property="og:image"]').attr('content') || '';
         }
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      } catch (metadataError: any) {
+        logger.warn('Failed to fetch YouTube page metadata', { videoId, error: metadataError.message });
       }
 
-      const htmlText = await response.text();
-      const $ = cheerio.load(htmlText);
+      // Attempt to fetch transcript using youtube-transcript
+      let transcript = '';
+      let transcriptAvailable = false;
 
-      // Extract metadata
-      const title = $('title').text().replace(' - YouTube', '') || 'YouTube Video';
-      const description = $('meta[name="description"]').attr('content') || '';
+      try {
+        const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
 
-      // Try to extract video duration from page
-      let duration = '';
-      const durationText = $('.ytp-time-duration').text();
-      if (durationText) {
-        duration = durationText.trim();
+        if (transcriptItems && transcriptItems.length > 0) {
+          // Combine all transcript segments into full text
+          transcript = transcriptItems
+            .map(item => item.text)
+            .join(' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          transcriptAvailable = true;
+
+          logger.info('Successfully extracted YouTube transcript', {
+            videoId,
+            segments: transcriptItems.length,
+            wordCount: this.countWords(transcript)
+          });
+        }
+      } catch (transcriptError: any) {
+        logger.warn('Failed to fetch YouTube transcript', {
+          videoId,
+          error: transcriptError.message
+        });
+        // Continue without transcript - graceful degradation
       }
 
-      // Extract content (description + any available transcript data)
-      let content = description;
-
-      // Try to extract additional content from the page
-      const descriptionElement = $('#description').text();
-      if (descriptionElement) {
-        content += '\n\n' + descriptionElement;
+      // Build content from transcript or fallback to description
+      let content = '';
+      if (transcript) {
+        content = `# ${title}\n\n`;
+        content += `## Transcript\n\n${transcript}`;
+        if (description) {
+          content += `\n\n## Description\n\n${description}`;
+        }
+      } else {
+        // Fallback to metadata-only content
+        content = `# ${title}\n\n`;
+        if (description) {
+          content += `${description}\n\n`;
+        }
+        content += `[Note: Transcript not available for this video. Analysis based on available metadata.]`;
       }
-
-      // Add note about transcript extraction
-      content += '\n\n[Note: Full transcript extraction requires YouTube Data API integration]';
 
       return {
         type: 'youtube',
@@ -236,8 +284,9 @@ export class ContentAnalyzer {
         metadata: {
           title,
           description: description.substring(0, 500) + (description.length > 500 ? '...' : ''),
-          duration,
-          tags: this.extractTagsFromContent(title + ' ' + description)
+          author: author || undefined,
+          thumbnail: thumbnail || undefined,
+          tags: this.extractTagsFromContent(title + ' ' + description + ' ' + transcript.substring(0, 1000))
         },
         content: content.trim(),
         wordCount: this.countWords(content),
@@ -245,6 +294,7 @@ export class ContentAnalyzer {
       };
 
     } catch (error: any) {
+      logger.error('Failed to extract YouTube content', { url, error: error.message });
       throw new Error(`Failed to extract YouTube content: ${error.message}`);
     }
   }
