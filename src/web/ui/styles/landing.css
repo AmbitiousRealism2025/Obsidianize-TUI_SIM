@@ -1,0 +1,94 @@
+/* ============================================================================
+   OBSIDIANIZE - Landing Page Styles
+   ============================================================================
+   Design: Centered ASCII art landing page with API info
+   Used by: index.ts homepage HTML template
+   ============================================================================ */
+
+/* Landing Page Layout */
+body.landing-page {
+  background-color: #0f0f23;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+}
+
+.landing-container {
+  text-align: center;
+}
+
+/* ASCII Art Display */
+.landing-container pre {
+  display: inline-block;
+  text-align: left;
+  line-height: 1.2;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Border styling (purple glow) */
+.landing-container .border {
+  color: #c084fc;
+}
+
+/* ASCII art text styling */
+.landing-container .ascii-art {
+  color: #9b59d0;
+  font-weight: bold;
+}
+
+/* Tagline styling */
+.landing-container .tagline {
+  color: #d8b4fe;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+/* API Info Section */
+.api-info {
+  color: #a78bfa;
+  margin-top: 30px;
+  font-size: 14px;
+  text-align: left;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.api-info a {
+  color: #c084fc;
+  text-decoration: none;
+}
+
+.api-info a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .landing-container pre {
+    font-size: 10px;
+  }
+
+  .landing-container .tagline {
+    font-size: 14px;
+  }
+
+  .api-info {
+    font-size: 12px;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-container pre {
+    font-size: 8px;
+  }
+
+  body.landing-page {
+    padding: 10px;
+  }
+}

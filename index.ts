@@ -64,9 +64,10 @@ export const app = {
       }
     }
 
-    // Serve static CSS
-    if (url.pathname === '/styles/terminal.css') {
-      const cssPath = join(UI_PATH, 'styles/terminal.css');
+    // Serve static CSS files
+    if (url.pathname === '/styles/terminal.css' || url.pathname === '/styles/landing.css') {
+      const cssFile = url.pathname === '/styles/terminal.css' ? 'terminal.css' : 'landing.css';
+      const cssPath = join(UI_PATH, 'styles', cssFile);
       if (existsSync(cssPath)) {
         const css = readFileSync(cssPath, 'utf-8');
         return new Response(css, {
@@ -175,58 +176,10 @@ export const app = {
   <meta name="apple-mobile-web-app-title" content="Obsidianize">
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <style>
-    body {
-      background-color: #0f0f23;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-    }
-    .container {
-      text-align: center;
-    }
-    pre {
-      display: inline-block;
-      text-align: left;
-      line-height: 1.2;
-      font-size: 14px;
-      margin: 0;
-    }
-    .border {
-      color: #c084fc;
-    }
-    .ascii-art {
-      color: #9b59d0;
-      font-weight: bold;
-    }
-    .tagline {
-      color: #d8b4fe;
-      margin-top: 20px;
-      font-size: 16px;
-    }
-    .api-info {
-      color: #a78bfa;
-      margin-top: 30px;
-      font-size: 14px;
-      text-align: left;
-      max-width: 600px;
-      line-height: 1.6;
-    }
-    .api-info a {
-      color: #c084fc;
-      text-decoration: none;
-    }
-    .api-info a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="/styles/landing.css">
 </head>
-<body>
-  <div class="container">
+<body class="landing-page">
+  <div class="landing-container">
     <pre class="border">${topBorder}</pre>
     <pre class="border">${sideBorder}${" ".repeat(borderWidth - 2)}${sideBorder}</pre>
 ${centeredLines.map(line => `    <pre><span class="border">${sideBorder}</span><span class="ascii-art">${line.slice(2, -2)}</span><span class="border">${sideBorder}</span></pre>`).join("\n")}

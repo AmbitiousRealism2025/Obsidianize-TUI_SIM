@@ -185,16 +185,17 @@ For current MVP scope, in-memory storage is acceptable with these mitigations:
 
 ---
 
-### Phase 5: Polish & Documentation (Priority: P3)
+### Phase 5: Polish & Documentation (Priority: P3) ✅ COMPLETE
 **Goal:** Clean up technical debt, update docs
 **Effort:** 2-3 hours
+**Status:** Completed - inline styles extracted to CSS, acceptance criteria added
 
-| ID | Task | Source | Files Affected |
-|----|------|--------|----------------|
-| P5-1 | Update CLAUDE.md with Phase 3 completion notes | Jules | `CLAUDE.md` |
-| P5-2 | Remove inline style duplication in index.ts | Codex v2 | `index.ts` |
-| P5-3 | Add concrete Phase 4 acceptance criteria | Codex v1 | `docs/PHASE_4_CLI_ROADMAP.md` |
-| P5-4 | Update ACTION_PLAN_OPUS_REVIEW.md status | Jules | `ACTION_PLAN_OPUS_REVIEW.md` |
+| ID | Task | Source | Files Affected | Status |
+|----|------|--------|----------------|--------|
+| P5-1 | Update CLAUDE.md with Phase 3 completion notes | Jules | `CLAUDE.md` | ✅ Done (previous agent) |
+| P5-2 | Remove inline style duplication in index.ts | Codex v2 | `index.ts`, `src/web/ui/styles/landing.css` | ✅ Done |
+| P5-3 | Add concrete Phase 4 acceptance criteria | Codex v1 | `docs/PHASE_4_CLI_ROADMAP.md` | ✅ Done |
+| P5-4 | Update action plan status | Jules | `docs/ACTION_PLAN_CONSOLIDATED.md` | ✅ Done |
 
 ---
 
@@ -228,13 +229,13 @@ For current MVP scope, in-memory storage is acceptable with these mitigations:
 
 ## Success Criteria
 
-| Phase | Criteria |
-|-------|----------|
-| Phase 1 | `grep -r "axios" src/` returns 0 results, all tests pass |
-| Phase 2 | `grep -r "dotenv" src/` returns 0 results, `bun test` passes without exit issues |
-| Phase 3 | GitHub Actions badge shows green, PRs require passing CI |
-| Phase 4 | Real YouTube URLs return actual transcripts, not placeholder text |
-| Phase 5 | All documentation reflects current implementation state |
+| Phase | Criteria | Status |
+|-------|----------|--------|
+| Phase 1 | `grep -r "axios" src/` returns 0 results, all tests pass | ✅ Complete |
+| Phase 2 | `grep -r "dotenv" src/` returns 0 results, `bun test` passes without exit issues | ✅ Complete |
+| Phase 3 | GitHub Actions badge shows green, PRs require passing CI | ✅ Complete |
+| Phase 4 | Real YouTube URLs return actual transcripts, not placeholder text | Pending |
+| Phase 5 | All documentation reflects current implementation state | ✅ Complete |
 
 ---
 
@@ -252,9 +253,9 @@ For current MVP scope, in-memory storage is acceptable with these mitigations:
 - `.github/workflows/ci.yml` - New file
 
 ### Lower Priority (Phase 4-5)
-- `src/core/processor.ts` - Lines 184-201 (YouTube stub)
-- `index.ts` - Template consolidation
-- Various `.md` documentation files
+- `src/core/processor.ts` - Lines 184-201 (YouTube stub) - Phase 4
+- ~~`index.ts` - Template consolidation~~ ✅ Phase 5 Complete
+- ~~Various `.md` documentation files~~ ✅ Phase 5 Complete
 
 ---
 
