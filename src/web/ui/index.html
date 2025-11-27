@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBSIDIANIZE - Your Knowledge, Crystallized</title>
+  <link rel="stylesheet" href="styles/terminal.css">
+</head>
+<body>
+  <div class="terminal-container">
+    <!-- ASCII Art Header Section -->
+    <div class="ascii-header" id="ascii-header">
+      <!-- ASCII art will be dynamically inserted here -->
+    </div>
+
+    <!-- Main Terminal Interface -->
+    <div class="terminal-window">
+      <!-- Terminal Header Bar -->
+      <div class="terminal-titlebar">
+        <span class="terminal-title">OBSIDIANIZE v1.0.0</span>
+        <span class="terminal-status" id="status-indicator">● READY</span>
+      </div>
+
+      <!-- Input Form Section -->
+      <div class="terminal-content">
+        <form id="obsidianize-form" class="terminal-form">
+          <!-- Content URL Input -->
+          <div class="form-group">
+            <label for="content-url" class="form-label">
+              <span class="prompt-symbol">$</span> CONTENT URL
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="content-url"
+                name="content-url"
+                class="terminal-input"
+                placeholder="https://youtube.com/watch?v=... or article URL"
+                required
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <!-- Content Type Selector -->
+          <div class="form-group">
+            <label class="form-label">
+              <span class="prompt-symbol">$</span> CONTENT TYPE
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="content-type" value="youtube" checked>
+                <span class="radio-custom"></span>
+                <span class="radio-text">YouTube Video</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="content-type" value="article">
+                <span class="radio-custom"></span>
+                <span class="radio-text">Article/Blog</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="content-type" value="paper">
+                <span class="radio-custom"></span>
+                <span class="radio-text">Research Paper</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="content-type" value="podcast">
+                <span class="radio-custom"></span>
+                <span class="radio-text">Podcast</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- API Key Input -->
+          <div class="form-group">
+            <label for="api-key" class="form-label">
+              <span class="prompt-symbol">$</span> GEMINI API KEY
+              <span class="label-hint">(encrypted client-side, never stored)</span>
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="api-key"
+                name="api-key"
+                class="terminal-input"
+                placeholder="AIza••••••••••••••••••••••••••••••••"
+                required
+                autocomplete="off"
+              >
+              <button type="button" class="toggle-visibility" id="toggle-api-key" aria-label="Toggle API key visibility">
+                <span class="visibility-icon">👁</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-group">
+            <button type="submit" class="terminal-button" id="submit-button">
+              <span class="button-text">▶ CRYSTALLIZE KNOWLEDGE</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Progress Display Area -->
+        <div class="progress-section" id="progress-section" style="display: none;">
+          <div class="progress-header">
+            <span class="progress-label">PROCESSING</span>
+            <span class="progress-percentage" id="progress-percentage">0%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+          <div class="progress-status" id="progress-status">
+            Initializing...
+          </div>
+        </div>
+
+        <!-- Output Display Area -->
+        <div class="output-section" id="output-section" style="display: none;">
+          <div class="output-header">
+            <span class="output-title">GENERATED NOTES</span>
+            <button type="button" class="terminal-button-sm" id="download-button">
+              <span class="button-text">⬇ DOWNLOAD MARKDOWN</span>
+            </button>
+          </div>
+          <div class="output-content">
+            <!-- Frontmatter Display -->
+            <div class="frontmatter-section" id="frontmatter-section" style="display: none;">
+              <div class="frontmatter-header">
+                <span class="code-label">YAML FRONTMATTER</span>
+              </div>
+              <pre class="frontmatter-display" id="frontmatter-display"></pre>
+            </div>
+
+            <!-- Markdown Content Display -->
+            <div class="markdown-section" id="markdown-section">
+              <div class="markdown-content" id="markdown-content">
+                <!-- Rendered markdown will appear here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Display Area -->
+        <div class="error-section" id="error-section" style="display: none;">
+          <div class="error-header">
+            <span class="error-icon">✖</span>
+            <span class="error-title">ERROR</span>
+          </div>
+          <div class="error-content">
+            <div class="error-message" id="error-message">
+              <!-- Error message will appear here -->
+            </div>
+            <div class="error-details" id="error-details" style="display: none;">
+              <pre id="error-stack"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal Footer -->
+      <div class="terminal-footer">
+        <span class="footer-info">Powered by Google Gemini AI</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-info">Bun.js Runtime</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-info" id="performance-info">⚡ Ready</span>
+      </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-panel">
+      <div class="info-section">
+        <h3 class="info-title">📖 ABOUT</h3>
+        <p class="info-text">
+          Obsidianize transforms web content into structured Markdown notes using AI.
+          Perfect for research, learning, and knowledge management.
+        </p>
+      </div>
+      <div class="info-section">
+        <h3 class="info-title">🔒 SECURITY</h3>
+        <p class="info-text">
+          Your API key is encrypted client-side and never stored on our servers.
+          All processing is done securely with end-to-end encryption.
+        </p>
+      </div>
+      <div class="info-section">
+        <h3 class="info-title">✨ FEATURES</h3>
+        <ul class="info-list">
+          <li>YouTube video summaries with timestamps</li>
+          <li>Article extraction and analysis</li>
+          <li>Research paper processing</li>
+          <li>Podcast transcript summaries</li>
+          <li>YAML frontmatter with metadata</li>
+          <li>Obsidian-ready markdown format</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>
