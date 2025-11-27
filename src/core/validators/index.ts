@@ -2,13 +2,13 @@
  * Comprehensive Validation Framework for Obsidianize
  * Implements Zod-based validation for all data structures
  *
- * Version: 1.0.0
- * Last Updated: October 11, 2024
+ * Version: 1.1.0
+ * Last Updated: November 27, 2025
  */
 
 import { z } from 'zod';
 
-import { 
+import {
   ContentType,
   ProcessingStatus,
   AnalysisMode,
@@ -17,6 +17,7 @@ import {
   EntityType,
   SafetyThreshold
 } from '../types/index.js';
+import { ssrfProtection, type SSRFValidationResult } from './ssrf-protection.js';
 import type {
   GeminiGem,
   ProcessingRequest,
@@ -525,7 +526,7 @@ export class UserConfigValidator extends BaseValidator<UserConfig> {
   }
 }
 
-/** URL validator with content type detection */
+/** URL validator with content type detection and SSRF protection */
 export class URLValidator {
   private static URL_PATTERNS = {
     youtube: /^https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
@@ -534,7 +535,7 @@ export class URLValidator {
     podcast: /^https?:\/\/(?:www\.)?(?:spotify\.com|apple\.com|soundcloud\.com)\/(?:podcast|episode)\/.+/
   };
 
-  /** Validate URL and detect content type */
+  /** Validate URL and detect content type with SSRF protection */
   static validateAndClassify(url: string): { valid: boolean; type: ContentType; error?: string } {
     try {
       // Basic URL validation
@@ -544,6 +545,16 @@ export class URLValidator {
           valid: false,
           type: ContentType.UNKNOWN,
           error: 'Only HTTPS URLs are supported'
+        };
+      }
+
+      // SSRF Protection - check for internal/private IP ranges
+      const ssrfResult = ssrfProtection.validateURL(url);
+      if (!ssrfResult.safe) {
+        return {
+          valid: false,
+          type: ContentType.UNKNOWN,
+          error: ssrfResult.error || 'URL blocked by security policy'
         };
       }
 
@@ -568,6 +579,11 @@ export class URLValidator {
         error: error instanceof Error ? error.message : 'Invalid URL format'
       };
     }
+  }
+
+  /** Validate URL for SSRF vulnerabilities only */
+  static validateSSRF(url: string): SSRFValidationResult {
+    return ssrfProtection.validateURL(url);
   }
 
   /** Extract YouTube video ID from URL */

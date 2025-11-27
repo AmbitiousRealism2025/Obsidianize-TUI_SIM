@@ -40,7 +40,7 @@ export interface CacheStats {
   newestEntry?: number;
 }
 
-class HighPerformanceCache {
+export class HighPerformanceCache {
   private db: Database;
   private config: CacheConfig;
   private cleanupTimer?: NodeJS.Timeout;

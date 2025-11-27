@@ -1,7 +1,14 @@
 /**
  * Performance monitoring system for Obsidianize TUI Simulator
  * Tracks startup times, memory usage, request processing, and system health
+ *
+ * Updated: November 27, 2025
+ * - Replaced O(n) array shift with O(1) CircularBuffer
+ * - Added constants from centralized constants file
  */
+
+import { NumericCircularBuffer } from './utils/circular-buffer.js';
+import { PERFORMANCE, TIME, SIZE } from './constants/index.js';
 
 export interface PerformanceMetrics {
   startupTime: number;
@@ -40,19 +47,24 @@ export interface PerformanceAlert {
   timestamp: number;
 }
 
-class PerformanceMonitor {
+export class PerformanceMonitor {
   private startTime: number = 0;
   private metrics: PerformanceMetrics;
   private alerts: PerformanceAlert[] = [];
-  private requestTimes: number[] = [];
-  private cacheAccessTimes: number[] = [];
+  // Use CircularBuffer for O(1) push operations instead of O(n) shift
+  private requestTimes: NumericCircularBuffer;
+  private cacheAccessTimes: NumericCircularBuffer;
   private memoryCheckInterval?: NodeJS.Timeout;
-  private readonly MEMORY_THRESHOLD = 100 * 1024 * 1024; // 100MB
-  private readonly RESPONSE_TIME_THRESHOLD = 1000; // 1 second
-  private readonly CACHE_HIT_RATE_THRESHOLD = 0.8; // 80%
-  private readonly STARTUP_TIME_THRESHOLD = 100; // 100ms
+  // Use constants from centralized constants file
+  private readonly MEMORY_THRESHOLD = SIZE.MEMORY_THRESHOLD;
+  private readonly RESPONSE_TIME_THRESHOLD = PERFORMANCE.RESPONSE_TIME_THRESHOLD;
+  private readonly CACHE_HIT_RATE_THRESHOLD = PERFORMANCE.CACHE_HIT_RATE_TARGET;
+  private readonly STARTUP_TIME_THRESHOLD = PERFORMANCE.STARTUP_TIME_TARGET;
 
   constructor() {
+    // Initialize circular buffers with configured sizes
+    this.requestTimes = new NumericCircularBuffer(PERFORMANCE.REQUEST_BUFFER_SIZE);
+    this.cacheAccessTimes = new NumericCircularBuffer(PERFORMANCE.CACHE_ACCESS_BUFFER_SIZE);
     this.metrics = this.initializeMetrics();
     this.startTime = performance.now();
   }
@@ -112,18 +124,15 @@ class PerformanceMonitor {
 
   /**
    * Record a request completion
+   * Uses O(1) CircularBuffer push instead of O(n) array shift
    */
   recordRequest(duration: number): void {
     this.metrics.requestMetrics.totalRequests++;
+    // CircularBuffer handles size limit automatically with O(1) operations
     this.requestTimes.push(duration);
 
-    // Keep only last 1000 request times for average calculation
-    if (this.requestTimes.length > 1000) {
-      this.requestTimes.shift();
-    }
-
-    this.metrics.requestMetrics.averageResponseTime =
-      this.requestTimes.reduce((sum, time) => sum + time, 0) / this.requestTimes.length;
+    // Get average directly from NumericCircularBuffer (O(1) operation)
+    this.metrics.requestMetrics.averageResponseTime = this.requestTimes.getAverage();
 
     if (duration > this.RESPONSE_TIME_THRESHOLD) {
       this.metrics.requestMetrics.slowRequests++;
@@ -141,6 +150,7 @@ class PerformanceMonitor {
 
   /**
    * Record cache access
+   * Uses O(1) CircularBuffer push instead of O(n) array shift
    */
   recordCacheAccess(isHit: boolean, accessTime: number): void {
     if (isHit) {
@@ -149,14 +159,11 @@ class PerformanceMonitor {
       this.metrics.cacheMetrics.totalMisses++;
     }
 
+    // CircularBuffer handles size limit automatically with O(1) operations
     this.cacheAccessTimes.push(accessTime);
 
-    if (this.cacheAccessTimes.length > 1000) {
-      this.cacheAccessTimes.shift();
-    }
-
-    this.metrics.cacheMetrics.averageAccessTime =
-      this.cacheAccessTimes.reduce((sum, time) => sum + time, 0) / this.cacheAccessTimes.length;
+    // Get average directly from NumericCircularBuffer (O(1) operation)
+    this.metrics.cacheMetrics.averageAccessTime = this.cacheAccessTimes.getAverage();
 
     const total = this.metrics.cacheMetrics.totalHits + this.metrics.cacheMetrics.totalMisses;
     this.metrics.cacheMetrics.hitRate = total > 0 ? this.metrics.cacheMetrics.totalHits / total : 0;
@@ -200,7 +207,7 @@ class PerformanceMonitor {
   private startMemoryMonitoring(): void {
     this.memoryCheckInterval = setInterval(() => {
       this.updateMemoryUsage();
-    }, 5000); // Check every 5 seconds
+    }, TIME.MEMORY_CHECK_INTERVAL);
   }
 
   /**
@@ -214,7 +221,7 @@ class PerformanceMonitor {
         this.metrics.systemHealth.eventLoopLag = lag;
 
         // Schedule next check
-        setTimeout(checkEventLoop, 1000);
+        setTimeout(checkEventLoop, TIME.EVENT_LOOP_CHECK_INTERVAL);
       });
     };
 
@@ -227,8 +234,8 @@ class PerformanceMonitor {
   private addAlert(alert: PerformanceAlert): void {
     this.alerts.push(alert);
 
-    // Keep only last 100 alerts
-    if (this.alerts.length > 100) {
+    // Keep only last MAX_ALERTS alerts
+    if (this.alerts.length > PERFORMANCE.MAX_ALERTS) {
       this.alerts.shift();
     }
 

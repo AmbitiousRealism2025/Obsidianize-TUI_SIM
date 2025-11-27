@@ -55,7 +55,7 @@ export interface RateLimitAnalytics {
   tierDistribution: Record<string, number>;
 }
 
-class RateLimiter {
+export class RateLimiter {
   private db: Database;
   private globalLimits: Map<string, RateLimitConfig> = new Map();
   private tiers: Map<string, RateLimitTier> = new Map();

@@ -34,7 +34,7 @@ export interface BackupInfo {
   checksum: string;
 }
 
-class AtomicFileOperations {
+export class AtomicFileOperations {
   private locks: Map<string, { pid: number; timestamp: number }> = new Map();
   private readonly DEFAULT_LOCK_TIMEOUT = 30000; // 30 seconds
   private readonly DEFAULT_MAX_RETRIES = 3;
