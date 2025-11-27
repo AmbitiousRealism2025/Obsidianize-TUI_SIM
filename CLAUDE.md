@@ -277,12 +277,11 @@ tests/
 
 ## Documentation References
 
-### Planning Documents (Complete)
-- **[High-Level Plan](./warp_planning/HIGH_LEVEL_PLAN.md)**: Complete architecture & development strategy
-- **[Design Document](./warp_planning/DESIGN_DOCUMENT.md)**: Detailed technical specifications
-- **[API Specifications](./warp_planning/API_SPECIFICATIONS.md)**: Complete API definitions
-- **[Security Architecture](./warp_planning/SECURITY_ARCHITECTURE.md)**: Enterprise-grade security
-- **[Development Setup](./warp_planning/DEVELOPMENT_SETUP.md)**: Developer environment guide
+### Project Documentation
+- **[API Guide](./API_GUIDE.md)**: Complete API reference and usage
+- **[Action Plan](./docs/ACTION_PLAN_CONSOLIDATED.md)**: Current remediation roadmap
+- **[Tech Stack](./docs/TECH_STACK_ARCHITECTURE.md)**: Architecture and dependencies
+- **[Archive](./archive/)**: Historical planning documents (Phase 1)
 
 ### Key Design Decisions
 - **Bun.js over Node.js**: For performance and developer experience

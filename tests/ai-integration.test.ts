@@ -187,21 +187,7 @@ describe('Integration Requirements Verification', () => {
     });
   });
 
-  it('should have required status files', () => {
-    const fs = require('fs');
-    const path = require('path');
-
-    const statusFiles = [
-      'status/Agent_B_Progress.md',
-      'status/Agent_B_Blockers.md',
-      'status/Agent_B_Ready.md'
-    ];
-
-    statusFiles.forEach(file => {
-      const filePath = path.join(process.cwd(), file);
-      expect(fs.existsSync(filePath)).toBe(true);
-    });
-  });
+  // Note: Status files test removed - status/ directory archived in Phase 1 cleanup
 
   it('should have required dependencies installed', () => {
     const packageJson = require('../package.json');

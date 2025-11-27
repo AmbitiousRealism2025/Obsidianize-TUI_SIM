@@ -143,23 +143,19 @@ The project already has a beautiful ASCII art header using figlet:
 ### Current File Structure
 ```
 Obsidianize-TUI_SIM/
-├── index.ts                 # Current Bun server with ASCII art
+├── index.ts                 # Production Bun server with full features
 ├── package.json             # Bun + TypeScript setup
 ├── tsconfig.json           # TypeScript configuration
+├── CLAUDE.md               # Comprehensive project context
 ├── ASCII_ART_STYLE_GUIDE.md # Terminal aesthetic guidelines
-├── warp_planning/           # 📋 COMPLETE planning documentation
-│   ├── README.md           # Planning documentation index
-│   ├── HIGH_LEVEL_PLAN.md  # Complete architecture document
-│   ├── DESIGN_DOCUMENT.md  # Detailed system design
-│   ├── API_SPECIFICATIONS.md # Complete API definitions
-│   ├── DEVELOPMENT_SETUP.md # Developer environment setup
-│   └── SECURITY_ARCHITECTURE.md # Security implementation
-├── Kiro_planning/           # Original requirements (reference)
-│   ├── requirements.md      # Original detailed requirements
-│   ├── design.md           # Original technical design
-│   └── tasks.md            # Original implementation plan
-├── README.md               # Updated project overview
-└── agents.md               # This document (updated)
+├── src/                    # ✅ Core infrastructure
+│   ├── core/               # Shared AI processing engine
+│   └── web/                # Web TUI interface
+├── docs/                   # 📋 Project documentation
+├── tests/                  # ✅ Comprehensive test suite (375+ tests)
+├── archive/                # 📦 Historical planning documents
+├── README.md               # Project overview
+└── agents.md               # This document
 ```
 
 ## Bun-Specific Performance Requirements
@@ -322,8 +318,8 @@ bun add package-name       # Faster than npm
 
 ## Critical Requirements from Original Planning
 
-### From Kiro Planning (Reference Implementation)
-The `Kiro_planning/` folder contains the original detailed requirements. Key points:
+### Output Format Requirements (from Original Planning)
+The following requirements ensure consistent markdown output:
 
 1. **Exact filename conventions** must be followed
 2. **YAML frontmatter** has specific required fields
@@ -331,7 +327,7 @@ The `Kiro_planning/` folder contains the original detailed requirements. Key poi
 4. **Section ordering** in markdown body is canonical
 5. **Content structuring** algorithms are specified
 
-**Note**: Original planning assumed traditional web scraping. Current implementation uses Gemini AI but must maintain the same output format for compatibility.
+**Note**: Implementation uses Gemini AI for content extraction while maintaining the same output format for Obsidian compatibility.
 
 ## Testing Strategy
 
@@ -376,17 +372,15 @@ The `Kiro_planning/` folder contains the original detailed requirements. Key poi
 
 ## Documentation References
 
-### 📋 Planning Documents (All Complete)
-1. **[Planning Index](./warp_planning/README.md)**: Overview of all documentation
-2. **[HIGH_LEVEL_PLAN.md](./warp_planning/HIGH_LEVEL_PLAN.md)**: Complete architecture
-3. **[DESIGN_DOCUMENT.md](./warp_planning/DESIGN_DOCUMENT.md)**: Detailed system design
-4. **[API_SPECIFICATIONS.md](./warp_planning/API_SPECIFICATIONS.md)**: Complete API definitions
-5. **[SECURITY_ARCHITECTURE.md](./warp_planning/SECURITY_ARCHITECTURE.md)**: Security implementation
-6. **[DEVELOPMENT_SETUP.md](./warp_planning/DEVELOPMENT_SETUP.md)**: Developer setup guide
+### 📋 Project Documentation
+1. **[CLAUDE.md](./CLAUDE.md)**: Comprehensive project context and development guide
+2. **[API Guide](./API_GUIDE.md)**: Complete API reference and usage
+3. **[Action Plan](./docs/ACTION_PLAN_CONSOLIDATED.md)**: Current remediation roadmap
+4. **[Tech Stack](./docs/TECH_STACK_ARCHITECTURE.md)**: Architecture and dependencies
 
 ### 🔧 Development Resources
 - **[ASCII_ART_STYLE_GUIDE.md](./ASCII_ART_STYLE_GUIDE.md)**: Terminal aesthetics
-- **[requirements.md](./Kiro_planning/requirements.md)**: Original detailed requirements
+- **[Archive](./archive/)**: Historical planning documents (Phase 1)
 
 ### 🔗 External Resources
 - **[Bun Documentation](https://bun.sh/docs)**: Runtime-specific features
@@ -433,7 +427,7 @@ The `Kiro_planning/` folder contains the original detailed requirements. Key poi
 **Planning Status**: ✅ COMPLETE  
 **Implementation Status**: 🔄 READY TO BEGIN
 
-**For Questions**: Reference the [Agent Constitution](./AGENT_CONSTITUTION.md) first, then this document, then consult the comprehensive planning documents in `warp_planning/`
+**For Questions**: Reference the [Agent Constitution](./AGENT_CONSTITUTION.md) first, then this document, then consult [CLAUDE.md](./CLAUDE.md) for comprehensive context
 
 **Remember**: 
 - **CONSTITUTION COMPLIANCE**: All work must adhere to the Agent Constitution principles

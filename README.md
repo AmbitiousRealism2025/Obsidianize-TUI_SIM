@@ -88,14 +88,6 @@ Both versions share the same AI-powered processing engine built around Gemini's 
 ## Project Structure
 
 ```
-├── warp_planning/           # 📋 Complete planning documentation
-│   ├── README.md           # Planning documentation index
-│   ├── HIGH_LEVEL_PLAN.md  # Architecture and roadmap
-│   ├── DESIGN_DOCUMENT.md  # Detailed system design
-│   ├── API_SPECIFICATIONS.md # Complete API definitions
-│   ├── DEVELOPMENT_SETUP.md # Developer setup guide
-│   └── SECURITY_ARCHITECTURE.md # Security implementation
-├── Kiro_planning/           # Original requirements (reference)
 ├── src/                     # ✅ Core infrastructure implemented
 │   ├── core/                # ✅ Shared AI processing engine
 │   │   ├── ai/              # ✅ Gemini API integration
@@ -106,12 +98,13 @@ Both versions share the same AI-powered processing engine built around Gemini's 
 │   │   ├── storage/         # ✅ Atomic file operations
 │   │   ├── rate-limit/      # ✅ Token bucket rate limiting
 │   │   └── performance/     # ✅ Performance monitoring
-│   ├── web/                 # 🔄 Web TUI interface (Phase 2)
+│   ├── web/                 # ✅ Web TUI interface (Phase 2-3)
 │   └── cli/                 # ⏳ CLI interface (Phase 4)
-├── tests/                   # ✅ Comprehensive test suite
-├── status/                  # ✅ Agent progress tracking
+├── docs/                    # 📋 Project documentation
+├── tests/                   # ✅ Comprehensive test suite (375+ tests)
 ├── scripts/                 # ✅ Build and utility scripts
-├── index.ts                 # ✅ Working prototype with core features
+├── archive/                 # 📦 Historical planning documents
+├── index.ts                 # ✅ Production server with full features
 ├── package.json             # Dependencies and scripts
 └── README.md               # This file
 ```
@@ -144,17 +137,15 @@ Both versions share the same AI-powered processing engine built around Gemini's 
 
 ## Documentation
 
-### 📋 Planning Documents (Complete)
-- **[Planning Index](./warp_planning/README.md)**: Overview of all planning documentation
-- **[High-Level Plan](./warp_planning/HIGH_LEVEL_PLAN.md)**: Complete architecture & development strategy
-- **[Design Document](./warp_planning/DESIGN_DOCUMENT.md)**: Detailed technical specifications
-- **[API Specifications](./warp_planning/API_SPECIFICATIONS.md)**: Complete API definitions
-- **[Security Architecture](./warp_planning/SECURITY_ARCHITECTURE.md)**: Enterprise-grade security
-- **[Development Setup](./warp_planning/DEVELOPMENT_SETUP.md)**: Developer environment guide
+### 📋 Project Documentation
+- **[CLAUDE.md](./CLAUDE.md)**: Comprehensive project context and development guide
+- **[API Guide](./API_GUIDE.md)**: Complete API reference and usage
+- **[Action Plan](./docs/ACTION_PLAN_CONSOLIDATED.md)**: Current remediation roadmap
+- **[Tech Stack](./docs/TECH_STACK_ARCHITECTURE.md)**: Architecture and dependencies
 
 ### 🔧 Development Resources
 - **[ASCII Style Guide](./ASCII_ART_STYLE_GUIDE.md)**: Terminal aesthetic guidelines
-- **[agents.md](./agents.md)**: Updated context for development agents
-- **[Original Requirements](./Kiro_planning/)**: Initial concept and requirements (reference)
+- **[agents.md](./agents.md)**: Context for development agents
+- **[Archive](./archive/)**: Historical planning documents (Phase 1)
 
 Built with ❤️ using Bun + TypeScript for maximum developer velocity and runtime performance.
