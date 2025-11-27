@@ -47,10 +47,11 @@
   - Natural language processing features
 
 ### Web & Data Fetching
-- **axios** (^1.12.2) - HTTP client
+- **Native fetch()** - Built-in HTTP client
+  - Uses Bun's native fetch API (no external dependency)
   - API communication and web requests
   - Fetches external content and resources
-  - Reliable request/response handling
+  - AbortController for timeout handling
 
 - **cheerio** (^1.1.2) - Server-side HTML parser
   - Parses HTML content for extraction
@@ -69,10 +70,10 @@
   - Type-safe configuration and API responses
 
 ### Environment & Configuration
-- **dotenv** (^17.2.3) - Environment variable loader
-  - Loads .env configuration files
-  - Manages environment-specific settings
-  - Essential for deployment and development
+- **Native .env support** - Built-in Bun feature
+  - Bun automatically loads `.env` files at startup
+  - No external dependency required
+  - Manages environment-specific settings natively
 
 ## Development Dependencies
 

@@ -93,20 +93,19 @@ src/
 ```json
 {
   "@google/generative-ai": "^0.24.1",        // Gemini API client ✅
-  "axios": "^1.12.2",                         // HTTP client ✅
   "marked": "^16.4.0",                        // Markdown processing ✅
   "yaml": "^2.8.1",                           // YAML frontmatter ✅
   "zod": "^4.1.12",                           // Runtime validation ✅
   "figlet": "^1.7.0",                         // ASCII art generation ✅
   "chalk": "^5.6.2",                          // Terminal colors ✅
   "dompurify": "^3.2.7",                      // HTML sanitization ✅
-  "dotenv": "^17.2.3",                        // Environment variables ✅
   "gray-matter": "^4.0.3",                    // Frontmatter parsing ✅
   "cheerio": "^1.1.2",                        // Web scraping ✅
   "pdf-parse": "^2.2.9",                      // PDF processing ✅
   "vitest": "^3.2.4"                          // Test runner ✅
 }
 ```
+**Note**: HTTP requests use Bun's native `fetch()` API (no axios dependency). Environment variables are loaded automatically by Bun's native `.env` support (no dotenv dependency).
 
 ## Development Guidelines
 

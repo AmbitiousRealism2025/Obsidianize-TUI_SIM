@@ -43,8 +43,8 @@
   "cheerio": "^1.1.2",                    // Web scraping (DOM parsing)
   "pdf-parse": "^2.2.9",                  // PDF text extraction
   "pdf2pic": "^3.2.0",                    // PDF to image conversion
-  "axios": "^1.12.2",                     // HTTP client with retry logic
   "gray-matter": "^4.0.3"                 // YAML/Frontmatter parsing
+  // HTTP: Uses native fetch() with AbortController (no axios)
 }
 ```
 
@@ -67,10 +67,9 @@
 ```
 
 #### Environment & Configuration
-```json
-{
-  "dotenv": "^17.2.3"                     // Environment variable loading
-}
+```
+Native Bun feature - no external dependency required
+Bun automatically loads .env files at startup
 ```
 
 #### Testing

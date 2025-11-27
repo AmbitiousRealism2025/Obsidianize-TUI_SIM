@@ -208,7 +208,6 @@ describe('Integration Requirements Verification', () => {
 
     const requiredDeps = [
       '@google/generative-ai',
-      'axios',
       'cheerio',
       'pdf-parse'
     ];
