@@ -1,5 +1,7 @@
 # Obsidianize TUI
 
+[![CI](https://github.com/AmbitiousRealism2025/Obsidianize-TUI_SIM/actions/workflows/ci.yml/badge.svg)](https://github.com/AmbitiousRealism2025/Obsidianize-TUI_SIM/actions/workflows/ci.yml)
+
 **✨ Your Knowledge, Crystallized ✨**
 
 A dual-target application powered by Google Gemini AI that transforms web content (YouTube videos, articles, papers) into structured Markdown notes following the "Gemini Gem" format. Built with Bun + TypeScript for blazing-fast performance and authentic terminal aesthetics.

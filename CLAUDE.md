@@ -44,6 +44,14 @@ bun test --watch
 bun test --bench
 ```
 
+### CI/CD Pipeline
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs on push/PR:
+- **TypeScript Check**: `bun run check` (advisory - pre-existing type issues)
+- **Tests**: `bun test` (375+ tests, required to pass)
+- **Build**: Production bundle with artifact upload
+
+See `docs/ARCHITECTURE_DECISIONS.md` for key architectural decisions (ADRs).
+
 ## Architecture Overview
 
 ### Dual-Target System Design

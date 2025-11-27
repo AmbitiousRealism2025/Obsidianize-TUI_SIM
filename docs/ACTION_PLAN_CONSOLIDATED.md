@@ -75,9 +75,10 @@ src/web/security/
 
 ## Phased Remediation Plan
 
-### Phase 1: Critical Compliance (Priority: P0)
+### Phase 1: Critical Compliance (Priority: P0) ✅ COMPLETE
 **Goal:** Align with Agent Constitution requirements
 **Effort:** 4-6 hours
+**Status:** Completed in PR #11 - axios replaced with native fetch
 
 | ID | Task | Source | Files Affected |
 |----|------|--------|----------------|
@@ -105,9 +106,10 @@ const data = await response.text(); // or .json()
 
 ---
 
-### Phase 2: Cleanup & Optimization (Priority: P1)
+### Phase 2: Cleanup & Optimization (Priority: P1) ✅ COMPLETE
 **Goal:** Remove redundant dependencies, fix test harness
 **Effort:** 2-3 hours
+**Status:** Completed in PR #11 - dotenv removed, exit(1) fixed, pdf-parse kept
 
 | ID | Task | Source | Files Affected |
 |----|------|--------|----------------|
@@ -128,9 +130,10 @@ const data = await response.text(); // or .json()
 
 ---
 
-### Phase 3: Infrastructure Hardening (Priority: P1)
+### Phase 3: Infrastructure Hardening (Priority: P1) ✅ COMPLETE
 **Goal:** Add CI/CD, improve job persistence
 **Effort:** 4-6 hours
+**Status:** Completed in PR #12 - GitHub Actions CI, ADRs documented, cleanup already existed
 
 | ID | Task | Source | Files Affected |
 |----|------|--------|----------------|
