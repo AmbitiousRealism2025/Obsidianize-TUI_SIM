@@ -3,8 +3,12 @@ import * as cheerio from 'cheerio';
 import { URL } from 'url';
 import { createLogger } from '../logging/index.js';
 
-/** Helper function for fetch with timeout */
-async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout: number = 15000): Promise<Response> {
+/** Helper function for fetch with timeout - fetches and reads body within timeout window */
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit = {},
+  timeout: number = 15000
+): Promise<{ ok: boolean; status: number; statusText: string; text: string; headers: Headers }> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -13,7 +17,17 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout:
       ...options,
       signal: controller.signal
     });
-    return response;
+
+    // Read body within timeout window - don't clear timeout until body is fully read
+    const text = await response.text();
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      text,
+      headers: response.headers
+    };
   } finally {
     clearTimeout(timeoutId);
   }
@@ -204,7 +218,7 @@ export class ContentAnalyzer {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const htmlText = await response.text();
+      const htmlText = response.text;
       const $ = cheerio.load(htmlText);
 
       // Extract metadata
@@ -261,7 +275,7 @@ export class ContentAnalyzer {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const htmlText = await response.text();
+      const htmlText = response.text;
       const $ = cheerio.load(htmlText);
 
       // Extract metadata
@@ -396,7 +410,7 @@ To enable full PDF analysis, install and configure pdf-parse library with proper
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const htmlText = await response.text();
+      const htmlText = response.text;
       const $ = cheerio.load(htmlText);
 
       // Extract podcast metadata
