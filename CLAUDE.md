@@ -99,14 +99,13 @@ src/
   "figlet": "^1.7.0",                         // ASCII art generation ✅
   "chalk": "^5.6.2",                          // Terminal colors ✅
   "dompurify": "^3.2.7",                      // HTML sanitization ✅
-  "dotenv": "^17.2.3",                        // Environment variables ✅
   "gray-matter": "^4.0.3",                    // Frontmatter parsing ✅
   "cheerio": "^1.1.2",                        // Web scraping ✅
   "pdf-parse": "^2.2.9",                      // PDF processing ✅
   "vitest": "^3.2.4"                          // Test runner ✅
 }
 ```
-**Note**: HTTP requests use Bun's native `fetch()` API (no axios dependency).
+**Note**: HTTP requests use Bun's native `fetch()` API (no axios dependency). Environment variables are loaded automatically by Bun's native `.env` support (no dotenv dependency).
 
 ## Development Guidelines
 

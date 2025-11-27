@@ -67,10 +67,9 @@
 ```
 
 #### Environment & Configuration
-```json
-{
-  "dotenv": "^17.2.3"                     // Environment variable loading
-}
+```
+Native Bun feature - no external dependency required
+Bun automatically loads .env files at startup
 ```
 
 #### Testing

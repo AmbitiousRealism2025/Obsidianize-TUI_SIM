@@ -6,6 +6,9 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { validateEnvironment } from '../scripts/env-validator';
 
+// Test options: skip file check since we're setting env vars directly, quiet to reduce noise
+const testOptions = { skipFileCheck: true, quiet: true };
+
 describe('Environment Configuration', () => {
   beforeEach(() => {
     // Clear environment before each test
@@ -37,7 +40,7 @@ describe('Environment Configuration', () => {
 
     // This should not throw an error
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).not.toThrow();
   });
 
@@ -47,7 +50,7 @@ describe('Environment Configuration', () => {
     process.env.HOST = 'localhost';
 
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).toThrow();
   });
 
@@ -57,7 +60,7 @@ describe('Environment Configuration', () => {
     process.env.HOST = 'localhost';
 
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).toThrow();
   });
 
@@ -67,7 +70,7 @@ describe('Environment Configuration', () => {
     process.env.HOST = 'localhost';
 
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).toThrow();
   });
 
@@ -80,7 +83,7 @@ describe('Environment Configuration', () => {
     process.env.BUNDLE_SIZE_LIMIT = '5242880';
 
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).not.toThrow();
   });
 
@@ -91,7 +94,7 @@ describe('Environment Configuration', () => {
     process.env.STARTUP_TIMEOUT = '150'; // Over 100ms target
 
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).not.toThrow(); // Should still pass but warn
   });
 
@@ -102,7 +105,7 @@ describe('Environment Configuration', () => {
     process.env.BUNDLE_SIZE_LIMIT = '5242880'; // 5MB
 
     expect(() => {
-      validateEnvironment();
+      validateEnvironment(testOptions);
     }).not.toThrow();
   });
 });

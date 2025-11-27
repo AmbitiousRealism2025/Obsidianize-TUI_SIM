@@ -3,10 +3,20 @@
 /**
  * Environment Validation Script
  * Validates that all required environment variables are set and properly formatted
+ *
+ * Note: Bun natively loads .env files automatically, so no dotenv dependency needed.
+ * Throws errors instead of calling exit(1) to be test-runner friendly.
  */
 
 import { existsSync } from 'node:fs';
-import { exit } from 'node:process';
+
+/** Custom error class for environment validation failures */
+export class EnvironmentValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'EnvironmentValidationError';
+  }
+}
 
 interface EnvConfig {
   required: string[];
@@ -84,50 +94,61 @@ const ENV_CONFIG: EnvConfig = {
   }
 };
 
-function validateEnvironment(): void {
-  console.log('🔍 Validating environment configuration...\n');
+interface ValidatorOptions {
+  /** Skip .env file existence check (useful for testing when env vars are already set) */
+  skipFileCheck?: boolean;
+  /** Suppress console output */
+  quiet?: boolean;
+}
 
-  // Check if .env file exists
-  if (!existsSync('.env')) {
-    console.error('❌ Error: .env file not found!');
-    console.log('💡 Please copy .env.example to .env and configure your values.\n');
-    exit(1);
+function validateEnvironment(options: ValidatorOptions = {}): void {
+  const { skipFileCheck = false, quiet = false } = options;
+
+  const log = (msg: string) => { if (!quiet) console.log(msg); };
+  const logError = (msg: string) => { if (!quiet) console.error(msg); };
+
+  log('🔍 Validating environment configuration...\n');
+
+  // Check if .env file exists (can be skipped for testing)
+  // Note: Bun automatically loads .env files, but we check for existence to provide helpful error messages
+  if (!skipFileCheck && !existsSync('.env')) {
+    const errorMsg = '.env file not found! Please copy .env.example to .env and configure your values.';
+    logError(`❌ Error: ${errorMsg}`);
+    throw new EnvironmentValidationError(errorMsg);
   }
 
-  // Load environment variables
-  const { error } = require('dotenv').config();
-  if (error) {
-    console.error('❌ Error loading .env file:', error.message);
-    exit(1);
+  // Bun natively loads .env files - no need for dotenv.config()
+  if (!skipFileCheck) {
+    log('✅ .env file loaded successfully (via Bun native support)\n');
+  } else {
+    log('✅ Using environment variables from process.env\n');
   }
-
-  console.log('✅ .env file loaded successfully\n');
 
   let hasErrors = false;
   const warnings: string[] = [];
 
   // Validate required variables
-  console.log('📋 Checking required environment variables:');
+  log('📋 Checking required environment variables:');
   for (const varName of ENV_CONFIG.required) {
     const value = process.env[varName];
 
     if (!value) {
-      console.error(`  ❌ ${varName}: Missing required value`);
+      logError(`  ❌ ${varName}: Missing required value`);
       hasErrors = true;
       continue;
     }
 
     const validator = ENV_CONFIG.validators[varName];
     if (validator && !validator(value)) {
-      console.error(`  ❌ ${varName}: Invalid value "${value}"`);
+      logError(`  ❌ ${varName}: Invalid value "${value}"`);
       hasErrors = true;
     } else {
-      console.log(`  ✅ ${varName}: ${value}`);
+      log(`  ✅ ${varName}: ${value}`);
     }
   }
 
   // Validate optional variables
-  console.log('\n📝 Checking optional environment variables:');
+  log('\n📝 Checking optional environment variables:');
   for (const varName of ENV_CONFIG.optional) {
     const value = process.env[varName];
 
@@ -138,17 +159,17 @@ function validateEnvironment(): void {
 
     const validator = ENV_CONFIG.validators[varName];
     if (validator && !validator(value)) {
-      console.error(`  ❌ ${varName}: Invalid value "${value}"`);
+      logError(`  ❌ ${varName}: Invalid value "${value}"`);
       hasErrors = true;
     } else {
-      console.log(`  ✅ ${varName}: ${value}`);
+      log(`  ✅ ${varName}: ${value}`);
     }
   }
 
   // Display warnings
   if (warnings.length > 0) {
-    console.log('\n⚠️  Warnings:');
-    warnings.forEach(warning => console.log(warning));
+    log('\n⚠️  Warnings:');
+    warnings.forEach(warning => log(warning));
   }
 
   // Performance validation
@@ -156,28 +177,35 @@ function validateEnvironment(): void {
   const maxMemoryUsage = parseInt(process.env.MAX_MEMORY_USAGE || '512', 10);
   const bundleSizeLimit = parseInt(process.env.BUNDLE_SIZE_LIMIT || '5242880', 10);
 
-  console.log('\n🚀 Performance Configuration:');
-  console.log(`  ⏱️  Startup timeout: ${startupTimeout}ms`);
-  console.log(`  💾 Max memory usage: ${maxMemoryUsage}MB`);
-  console.log(`  📦 Bundle size limit: ${(bundleSizeLimit / 1024 / 1024).toFixed(1)}MB`);
+  log('\n🚀 Performance Configuration:');
+  log(`  ⏱️  Startup timeout: ${startupTimeout}ms`);
+  log(`  💾 Max memory usage: ${maxMemoryUsage}MB`);
+  log(`  📦 Bundle size limit: ${(bundleSizeLimit / 1024 / 1024).toFixed(1)}MB`);
 
   if (startupTimeout > 100) {
-    console.log('  ⚠️  Startup timeout exceeds 100ms target');
+    log('  ⚠️  Startup timeout exceeds 100ms target');
   } else {
-    console.log('  ✅ Startup timeout meets target');
+    log('  ✅ Startup timeout meets target');
   }
 
   if (hasErrors) {
-    console.log('\n❌ Environment validation failed!');
-    exit(1);
+    const errorMsg = 'Environment validation failed! See errors above.';
+    log(`\n❌ ${errorMsg}`);
+    throw new EnvironmentValidationError(errorMsg);
   }
 
-  console.log('\n✅ Environment validation completed successfully!');
+  log('\n✅ Environment validation completed successfully!');
 }
 
 // Run validation if this script is executed directly
+// When running as CLI, convert thrown errors to exit(1) for proper shell exit codes
 if (import.meta.main) {
-  validateEnvironment();
+  try {
+    validateEnvironment();
+  } catch (error) {
+    // Error message already logged, just exit with failure code
+    process.exit(1);
+  }
 }
 
 export { validateEnvironment };

@@ -70,10 +70,10 @@
   - Type-safe configuration and API responses
 
 ### Environment & Configuration
-- **dotenv** (^17.2.3) - Environment variable loader
-  - Loads .env configuration files
-  - Manages environment-specific settings
-  - Essential for deployment and development
+- **Native .env support** - Built-in Bun feature
+  - Bun automatically loads `.env` files at startup
+  - No external dependency required
+  - Manages environment-specific settings natively
 
 ## Development Dependencies
 
